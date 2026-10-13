@@ -9,8 +9,8 @@ First responsive design, using the original Strikeout sky photograph and S artwo
 - Studios, Dopo, Formal, Catalog, and About have independent URLs with the top S and a back arrow. Page content is intentionally pending.
 - Film autoplays muted, with native player controls hidden. Click/tap the film (or use the focused button with Enter/Space) to toggle sound. Switching to the desktop catalog mutes and pauses; returning resumes muted at the same point. Navigation destroys the old player.
 - Desktop Space toggles film sound whenever the film view is active. Held keys do not repeat the action; links, buttons, form fields, modified shortcuts and mobile layouts retain their normal keyboard behavior.
-- The YouTube iframe begins concealed behind the film's black background. It fades in after 3.5 seconds of uninterrupted playback to avoid showing YouTube's opening thumbnail/title/button overlay. Buffering before that reveal cancels the reveal timer. Returning from the desktop catalog repeats this conceal/reveal sequence. Sound toggling while playing never resends a play command.
-- Autoplay denial leaves a play icon; player errors provide a link to watch the film. This is a startup-visibility treatment, not removal of YouTube's internal UI. A hosted MP4/WebM remains supported for an entirely unbranded player.
+- The YouTube iframe stays visible during startup, buffering and playback. Do not hide it behind a timer or a playback-event gate: that caused a black-screen regression when playback did not settle. Sound toggling while playing never resends a play command.
+- Autoplay denial leaves a play icon; player errors provide a link to watch the film. YouTube's opening graphics may appear despite controls being disabled. A hosted MP4/WebM remains supported for an entirely unbranded player.
 - YouTube chooses stream quality automatically and no longer supports forcing playback quality. Guaranteed maximum-resolution playback is pending the original full-quality MP4/WebM or its hosted URL. Do not add ineffective `setPlaybackQuality`/`suggestedQuality` calls. Reference: https://developers.google.com/youtube/iframe_api_revision_history
 
 ## Content

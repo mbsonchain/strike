@@ -1,5 +1,4 @@
 let youtubePromise;
-export const STARTUP_REVEAL_MS = 3500;
 
 export function handleSoundShortcut(event, controller, enabled) {
   if (!enabled || !controller || event.defaultPrevented || (event.code !== 'Space' && event.key !== ' ')) return;
@@ -47,10 +46,6 @@ export function videoSource(raw, origin) {
 export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = location.origin } = {}) {
   const source = videoSource(film.url, origin);
   let player, video, ready = false, disposed = false, visible = true, soundOn = false, playing = false;
-  let revealTimer;
-  // The iframe stays mounted for autoplay/API events, but its opening UI is
-  // concealed until playback has continued long enough for that UI to settle.
-  frame.dataset.revealed = source?.kind === 'youtube' ? 'false' : 'true';
   const button = document.createElement('button');
   button.className = 'film-sound';
   button.type = 'button';
@@ -60,19 +55,6 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   announcement.className = 'sr-only';
   announcement.setAttribute('aria-live', 'polite');
 
-  function conceal() {
-    clearTimeout(revealTimer);
-    revealTimer = undefined;
-    if (source?.kind === 'youtube') frame.dataset.revealed = 'false';
-  }
-  function revealAfterStartup() {
-    if (frame.dataset.revealed === 'true' || revealTimer !== undefined) return;
-    revealTimer = setTimeout(() => {
-      revealTimer = undefined;
-      if (!disposed && visible && playing) frame.dataset.revealed = 'true';
-    }, STARTUP_REVEAL_MS);
-  }
-
   function updateSound(announce = false) {
     button.setAttribute('aria-label', 'Film sound');
     button.setAttribute('aria-pressed', String(soundOn));
@@ -81,7 +63,6 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   function blocked() {
     if (disposed || !visible) return;
     playing = false;
-    conceal();
     frame.dataset.blocked = 'true';
     button.setAttribute('aria-label', 'Play film and toggle sound');
   }
@@ -101,7 +82,6 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   }
   function failed() {
     if (disposed) return;
-    conceal();
     playing = false;
     ready = false;
     player?.destroy();
@@ -169,12 +149,8 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
             playing = true;
             frame.dataset.blocked = 'false';
             updateSound();
-            revealAfterStartup();
           } else {
             playing = false;
-            // Never expose the thumbnail/branding if playback stalls before
-            // the first reveal. Hide paused and ended player screens as well.
-            if (event.data !== 3 || frame.dataset.revealed !== 'true') conceal();
             if (event.data === 0 || event.data === 2) blocked();
           }
         },
@@ -188,7 +164,7 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     setVisible(next) {
       const wasVisible = visible;
       visible = next;
-      if (!visible) { playing = false; conceal(); }
+      if (!visible) playing = false;
       if (!ready || disposed) return;
       if (!visible) {
         setSound(false);
@@ -197,7 +173,6 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     },
     destroy() {
       disposed = true;
-      conceal();
       if (video) { video.pause(); video.removeAttribute('src'); video.load(); }
       player?.destroy();
       frame.replaceChildren();

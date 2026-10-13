@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mountFilm, videoSource, handleSoundShortcut, STARTUP_REVEAL_MS } from '../media.js';
+import { mountFilm, videoSource, handleSoundShortcut } from '../media.js';
 
 const origin = 'https://www.strikeout.us';
 const film = { url: 'https://youtu.be/cUV2OUpyYvk', title: 'Ghost Town' };
@@ -142,44 +142,6 @@ test('direct video is muted with no native controls and responds to the same sou
   assert.equal(video.calls.at(-1), 'pause');
   controller.destroy();
   assert.deepEqual(video.calls.slice(-2), ['pause', 'load']);
-});
-
-test('startup stays concealed until actual playback has settled, not merely ready', async t => {
-  t.mock.timers.enable({ apis: ['setTimeout'] });
-  const { frame, instances } = setup(t);
-  await Promise.resolve();
-  const player = instances[0];
-  player.events.onReady({ target: player });
-  t.mock.timers.tick(STARTUP_REVEAL_MS * 2);
-  assert.equal(frame.dataset.revealed, 'false');
-  player.events.onStateChange({ data: 1 });
-  t.mock.timers.tick(STARTUP_REVEAL_MS - 1);
-  assert.equal(frame.dataset.revealed, 'false');
-  t.mock.timers.tick(1);
-  assert.equal(frame.dataset.revealed, 'true');
-});
-
-test('buffering restarts the startup concealment and hiding cancels pending reveals', async t => {
-  t.mock.timers.enable({ apis: ['setTimeout'] });
-  const { frame, instances, controller } = setup(t);
-  await Promise.resolve();
-  const player = instances[0];
-  player.events.onReady({ target: player });
-  player.events.onStateChange({ data: 1 });
-  t.mock.timers.tick(2000);
-  player.events.onStateChange({ data: 3 });
-  t.mock.timers.tick(STARTUP_REVEAL_MS);
-  assert.equal(frame.dataset.revealed, 'false');
-  player.events.onStateChange({ data: 1 });
-  t.mock.timers.tick(STARTUP_REVEAL_MS);
-  assert.equal(frame.dataset.revealed, 'true');
-  controller.setVisible(false);
-  assert.equal(frame.dataset.revealed, 'false');
-  controller.setVisible(true);
-  player.events.onStateChange({ data: 1 });
-  controller.destroy();
-  t.mock.timers.tick(STARTUP_REVEAL_MS);
-  assert.equal(frame.dataset.revealed, 'false');
 });
 
 test('sound clicks while playing do not resend playback commands or reveal overlays', async t => {
