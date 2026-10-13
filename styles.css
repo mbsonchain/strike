@@ -1,0 +1,83 @@
+:root {
+  color-scheme: light;
+  font-family: articulat-cf, Arial, Helvetica, sans-serif;
+  font-weight: 900;
+  color: #080a0d;
+  background: #769abe;
+  font-synthesis: weight;
+  --edge: clamp(22px, 4vw, 64px);
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 280px; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; }
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 3px solid #fff; outline-offset: 7px; }
+[hidden] { display: none !important; }
+.sky { position: fixed; z-index: -1; inset: 0; background: #769abe url('/assets/strikeout-sky.jpg') center / cover no-repeat; }
+.entrance { min-height: 100svh; display: grid; place-items: center; }
+.enter { border: 0; padding: 28px; background: transparent; line-height: 0; transition: transform 250ms ease; }
+.enter img { display: block; width: clamp(160px, 18vw, 240px); height: auto; }
+.enter:hover { transform: scale(1.045); }
+.enter:active { transform: scale(.97); }
+.experience { min-height: 100svh; display: flex; flex-direction: column; padding: var(--edge); animation: arrive 400ms ease both; }
+.stage { flex: 1; display: grid; align-items: center; width: 100%; }
+.film-panel, .catalog-panel { grid-area: 1 / 1; width: min(100%, 1120px); margin: auto; }
+.film-panel { max-width: min(1120px, calc((100svh - 190px) * 16 / 9)); }
+.film-frame { aspect-ratio: 16 / 9; width: 100%; background: #090b10; position: relative; overflow: hidden; }
+.film-frame:has(.film-empty) { border: 1px solid rgba(8, 10, 13, .75); background: rgba(77, 105, 137, .12); }
+.film-frame iframe, .film-frame video { position: absolute; inset: 0; height: 100%; width: 100%; border: 0; object-fit: contain; }
+.film-empty { height: 100%; display: grid; place-content: center; text-align: center; gap: 10px; }
+.film-empty p { margin: 0; font-size: 12px; font-weight: 600; }
+.film-empty .film-label { font-size: clamp(28px, 4vw, 52px); font-weight: 900; }
+.film-caption { margin: 14px 0 0; font-size: 16px; }
+.catalog-panel { padding: 22px 0; }
+.catalog-list { display: flex; flex-direction: column; }
+.catalog-row { display: flex; justify-content: center; align-items: center; border: 2px solid currentColor; margin-top: -2px; min-height: clamp(66px, 11svh, 104px); font-size: clamp(28px, 4.6vw, 62px); line-height: 1; text-transform: uppercase; transition: background-color 170ms ease, color 170ms ease; }
+.catalog-row:first-child { margin-top: 0; }
+.catalog-row:hover { background: #080a0d; color: #a9c3db; border-color: #080a0d; }
+.controls { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; min-height: 56px; padding-top: 20px; gap: 24px; }
+.view-control { display: inline-flex; align-items: center; gap: 14px; font-size: 13px; text-transform: uppercase; letter-spacing: .035em; }
+.view-label { opacity: .58; }
+.view-label.active { opacity: 1; }
+.view-switch { width: 64px; height: 34px; border: 2px solid #080a0d; border-radius: 0; background: transparent; padding: 3px; }
+.view-switch span { display: block; width: 26px; height: 24px; background: #080a0d; transition: transform 200ms ease; }
+.view-switch[aria-checked="true"] span { transform: translateX(26px); }
+.home { font-size: clamp(18px, 2vw, 26px); text-transform: uppercase; line-height: 1; min-height: 44px; display: inline-flex; align-items: center; }
+.home:hover, .back:hover { text-decoration: underline; text-underline-offset: 5px; }
+.detail { min-height: 100svh; display: flex; flex-direction: column; padding: var(--edge); animation: arrive 350ms ease both; }
+.detail-content { flex: 1; display: flex; flex-direction: column; justify-content: center; width: min(100%, 1120px); margin: 0 auto; padding: 42px 0; }
+.detail h1 { text-transform: uppercase; font-size: clamp(58px, 12vw, 168px); line-height: .93; margin: 0 0 28px; overflow-wrap: anywhere; }
+.detail-copy { font-size: clamp(18px, 2.4vw, 28px); max-width: 760px; line-height: 1.35; white-space: pre-line; }
+.detail-copy p { margin: 0; }
+.back { display: inline-flex; align-items: center; min-height: 44px; font-size: 17px; text-transform: uppercase; }
+.no-script { display: grid; place-content: center; min-height: 100svh; text-align: center; line-height: 2; }
+@keyframes arrive { from { opacity: 0; } to { opacity: 1; } }
+@media (min-width: 761px) {
+  .experience[data-view="video"] .catalog-panel { display: none; }
+  .experience[data-view="catalog"] .film-panel { display: none; }
+}
+@media (max-width: 760px) {
+  :root { --edge: 20px; }
+  .enter img { width: 172px; }
+  .experience { padding-top: max(24px, env(safe-area-inset-top)); padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+  .stage { display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; gap: 32px; }
+  .film-panel, .catalog-panel { margin: 0; width: 100%; max-width: none; }
+  .film-frame { max-height: none; }
+  .film-empty { gap: 6px; }
+  .film-empty .film-label { font-size: 28px; }
+  .film-empty p { font-size: 11px; }
+  .film-caption { font-size: 14px; }
+  .catalog-panel { padding: 0; }
+  .catalog-row { min-height: clamp(60px, 9svh, 88px); font-size: clamp(27px, 8.5vw, 45px); }
+  .view-control { display: none; }
+  .experience .controls { justify-content: flex-end; margin-top: 16px; }
+  .home { font-size: 20px; }
+  .detail h1 { font-size: clamp(49px, 15vw, 112px); }
+  .detail .controls { gap: 12px; }
+  .back { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
