@@ -68,7 +68,10 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   }
   function play() {
     if (!ready || disposed || !visible) return;
-    if (video) video.play().catch(blocked);
+    if (video) video.play().catch(error => {
+      // Navigating to the catalog can cancel an in-flight play request.
+      if (error.name !== 'AbortError') blocked();
+    });
     else player.playVideo();
   }
   function setSound(enabled) {
@@ -112,14 +115,38 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     video = document.createElement('video');
     video.src = source.url;
     video.muted = true;
+    video.defaultMuted = true;
     video.autoplay = true;
     video.playsInline = true;
+    video.controls = false;
+    video.preload = 'auto';
+    video.disablePictureInPicture = true;
+    if (film.poster) video.poster = film.poster;
     video.setAttribute('aria-label', film.title);
-    video.addEventListener('playing', () => { playing = true; frame.dataset.blocked = 'false'; });
+    video.addEventListener('playing', () => {
+      if (disposed || !visible) { video.pause(); return; }
+      playing = true;
+      frame.dataset.blocked = 'false';
+      updateSound();
+    });
     video.addEventListener('pause', () => { playing = false; });
     video.addEventListener('ended', blocked);
     video.addEventListener('error', failed);
     frame.append(video, button, announcement);
+    if (film.displayTitle) {
+      const heading = document.createElement('div');
+      heading.className = 'film-title';
+      const title = document.createElement('span');
+      title.textContent = film.displayTitle;
+      heading.append(title);
+      if (film.byline) {
+        const byline = document.createElement('span');
+        byline.className = 'film-byline';
+        byline.textContent = film.byline;
+        heading.append(byline);
+      }
+      frame.append(heading);
+    }
     ready = true;
     button.disabled = false;
     play();

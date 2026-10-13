@@ -144,6 +144,50 @@ test('direct video is muted with no native controls and responds to the same sou
   assert.deepEqual(video.calls.slice(-2), ['pause', 'load']);
 });
 
+test('direct video cannot restart in the hidden catalog after a delayed playing event', t => {
+  setup(t);
+  const frame = new Element('div');
+  const controller = mountFilm(frame, { ...film, url: 'https://media.example/ghost-town.mp4' }, { origin });
+  const video = frame.children.find(node => node.tag === 'video');
+  controller.setVisible(false);
+  video.events.playing();
+  assert.equal(video.calls.at(-1), 'pause');
+  assert.equal(video.muted, true);
+  controller.setVisible(true);
+  assert.equal(video.calls.at(-1), 'play');
+  video.events.playing();
+  controller.toggleSound();
+  assert.equal(video.muted, false);
+  controller.destroy();
+});
+
+test('native autoplay denial can be retried, while cancelled play requests are harmless', async t => {
+  setup(t);
+  const frame = new Element('div');
+  const controller = mountFilm(frame, { ...film, url: 'https://media.example/ghost-town.mp4' }, { origin });
+  const video = frame.children.find(node => node.tag === 'video');
+  const button = frame.children.find(node => node.tag === 'button');
+  video.events.playing();
+  video.play = () => Promise.reject(Object.assign(new Error('Interrupted'), { name: 'AbortError' }));
+  controller.setVisible(false);
+  controller.setVisible(true);
+  await Promise.resolve();
+  assert.equal(frame.dataset.blocked, 'false');
+  video.play = () => Promise.reject(Object.assign(new Error('Autoplay denied'), { name: 'NotAllowedError' }));
+  controller.setVisible(false);
+  controller.setVisible(true);
+  await Promise.resolve();
+  assert.equal(frame.dataset.blocked, 'true');
+  video.play = () => { video.calls.push('play'); return Promise.resolve(); };
+  button.events.click();
+  assert.equal(video.calls.at(-1), 'play');
+  assert.equal(video.muted, false);
+  video.events.playing();
+  assert.equal(frame.dataset.blocked, 'false');
+  assert.equal(button.attributes['aria-label'], 'Film sound');
+  controller.destroy();
+});
+
 test('sound clicks while playing do not resend playback commands or reveal overlays', async t => {
   const { frame, instances, controller } = setup(t);
   await Promise.resolve();

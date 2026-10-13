@@ -1,8 +1,11 @@
-// Add the final YouTube/Vimeo link or a hosted .mp4/.webm here.
-// The empty state is intentional: no unrelated sample film is substituted.
+// Keep full movies outside Git; configure the public hosted film here.
+// An empty URL displays the intentional "Film to come" state.
 export const film = {
-  url: 'https://youtu.be/cUV2OUpyYvk',
+  url: 'https://pdaarrebwdised9y.public.blob.vercel-storage.com/films/ghost-town-1080p-20261014.mp4',
   title: 'Ghost Town — a short film by Matteo Salvadei',
+  displayTitle: 'ghost town',
+  byline: 'strikeout studios',
+  poster: '/assets/ghost-town-poster.jpg',
   caption: '',
 };
 
