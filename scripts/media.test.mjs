@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mountFilm, videoSource } from '../media.js';
+import { mountFilm, videoSource, handleSoundShortcut, STARTUP_REVEAL_MS } from '../media.js';
 
 const origin = 'https://www.strikeout.us';
 const film = { url: 'https://youtu.be/cUV2OUpyYvk', title: 'Ghost Town' };
@@ -34,6 +34,7 @@ function setup(t, loadPlayer) {
   } };
   const frame = new Element('div');
   const controller = mountFilm(frame, film, { origin, loadPlayer: loadPlayer || (() => Promise.resolve(YT)) });
+  t.after(() => controller.destroy());
   return { frame, controller, instances, YT };
 }
 
@@ -141,4 +142,74 @@ test('direct video is muted with no native controls and responds to the same sou
   assert.equal(video.calls.at(-1), 'pause');
   controller.destroy();
   assert.deepEqual(video.calls.slice(-2), ['pause', 'load']);
+});
+
+test('startup stays concealed until actual playback has settled, not merely ready', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { frame, instances } = setup(t);
+  await Promise.resolve();
+  const player = instances[0];
+  player.events.onReady({ target: player });
+  t.mock.timers.tick(STARTUP_REVEAL_MS * 2);
+  assert.equal(frame.dataset.revealed, 'false');
+  player.events.onStateChange({ data: 1 });
+  t.mock.timers.tick(STARTUP_REVEAL_MS - 1);
+  assert.equal(frame.dataset.revealed, 'false');
+  t.mock.timers.tick(1);
+  assert.equal(frame.dataset.revealed, 'true');
+});
+
+test('buffering restarts the startup concealment and hiding cancels pending reveals', async t => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { frame, instances, controller } = setup(t);
+  await Promise.resolve();
+  const player = instances[0];
+  player.events.onReady({ target: player });
+  player.events.onStateChange({ data: 1 });
+  t.mock.timers.tick(2000);
+  player.events.onStateChange({ data: 3 });
+  t.mock.timers.tick(STARTUP_REVEAL_MS);
+  assert.equal(frame.dataset.revealed, 'false');
+  player.events.onStateChange({ data: 1 });
+  t.mock.timers.tick(STARTUP_REVEAL_MS);
+  assert.equal(frame.dataset.revealed, 'true');
+  controller.setVisible(false);
+  assert.equal(frame.dataset.revealed, 'false');
+  controller.setVisible(true);
+  player.events.onStateChange({ data: 1 });
+  controller.destroy();
+  t.mock.timers.tick(STARTUP_REVEAL_MS);
+  assert.equal(frame.dataset.revealed, 'false');
+});
+
+test('sound clicks while playing do not resend playback commands or reveal overlays', async t => {
+  const { frame, instances, controller } = setup(t);
+  await Promise.resolve();
+  const player = instances[0];
+  player.events.onReady({ target: player });
+  player.events.onStateChange({ data: 1 });
+  player.calls.length = 0;
+  const button = frame.children.find(node => node.tag === 'button');
+  button.events.click();
+  assert.deepEqual(player.calls, ['volume:100', 'unmute']);
+  controller.toggleSound();
+  assert.equal(player.calls.at(-1), 'mute');
+  assert.ok(!player.calls.includes('play'));
+});
+
+test('desktop Space toggles sound once without scrolling; shortcuts leave other controls alone', () => {
+  let toggles = 0, prevented = 0;
+  const controller = { toggleSound() { toggles++; } };
+  const event = { code: 'Space', target: { closest: () => null }, preventDefault() { prevented++; } };
+  handleSoundShortcut(event, controller, true);
+  assert.equal(toggles, 1);
+  assert.equal(prevented, 1);
+  handleSoundShortcut({ ...event, repeat: true }, controller, true);
+  assert.equal(toggles, 1);
+  assert.equal(prevented, 2);
+  for (const changed of [{ ctrlKey: true }, { shiftKey: true }, { altKey: true }, { metaKey: true }, { defaultPrevented: true }, { target: { closest: () => ({}) } }, { code: 'Enter' }]) handleSoundShortcut({ ...event, ...changed }, controller, true);
+  handleSoundShortcut(event, controller, false);
+  handleSoundShortcut(event, null, true);
+  assert.equal(toggles, 1);
+  assert.equal(prevented, 2);
 });

@@ -1,5 +1,5 @@
 import { film, pages } from './content.js';
-import { mountFilm } from './media.js';
+import { mountFilm, handleSoundShortcut } from './media.js';
 
 const app = document.querySelector('#app');
 const mobile = window.matchMedia('(max-width: 760px)');
@@ -19,7 +19,8 @@ function syncMedia() {
   const show = mobile.matches || experience.dataset.view === 'video';
   if (show && !filmPlayer) filmPlayer = mountFilm(app.querySelector('.film-frame'), film);
   filmPlayer?.setVisible(show);
-  app.querySelector('.view-switch').setAttribute('aria-label', mobile.matches ? 'Jump between film and catalog' : 'Catalog view');
+  // The two sections remain stacked on mobile; there is no mobile view control.
+  app.querySelector('.controls').hidden = mobile.matches;
 }
 
 function setView(view, updateHistory = true) {
@@ -30,9 +31,6 @@ function setView(view, updateHistory = true) {
   app.querySelector('.view-switch').setAttribute('aria-checked', String(catalog));
   if (updateHistory) history.replaceState({}, '', catalog ? '/#catalog' : '/#video');
   syncMedia();
-  if (updateHistory && mobile.matches) {
-    app.querySelector(catalog ? '.catalog-panel' : '.film-panel').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
-  }
 }
 
 function render(focus = false) {
@@ -83,4 +81,7 @@ app.addEventListener('click', event => {
 window.addEventListener('popstate', () => render(true));
 window.addEventListener('hashchange', () => render());
 mobile.addEventListener('change', syncMedia);
+window.addEventListener('keydown', event => {
+  handleSoundShortcut(event, filmPlayer, !mobile.matches && app.querySelector('.experience')?.dataset.view === 'video');
+});
 render();

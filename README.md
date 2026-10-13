@@ -5,10 +5,13 @@ First responsive design, using the original Strikeout sky photograph and S artwo
 - Click the stationary S to enter the film view. A smaller S stays centered at the top and returns to the entrance.
 - Desktop: a wordless switch at the bottom center changes between the smaller film and the five catalog rows.
 - Mobile (760px and below): horizontal 16:9 film, then all five catalog rows, in one continuous view.
-- On mobile, the bottom switch jumps between the visible film and catalog sections without hiding either.
+- Mobile has no toggle; film and catalog stay visible in one stacked layout.
 - Studios, Dopo, Formal, Catalog, and About have independent URLs with the top S and a back arrow. Page content is intentionally pending.
 - Film autoplays muted, with native player controls hidden. Click/tap the film (or use the focused button with Enter/Space) to toggle sound. Switching to the desktop catalog mutes and pauses; returning resumes muted at the same point. Navigation destroys the old player.
-- Autoplay denial leaves a play icon; player errors provide a link to watch the film. YouTube can still display branding because its branding suppression parameters are no longer supported. A hosted MP4/WebM can replace YouTube for an entirely clean player.
+- Desktop Space toggles film sound whenever the film view is active. Held keys do not repeat the action; links, buttons, form fields, modified shortcuts and mobile layouts retain their normal keyboard behavior.
+- The YouTube iframe begins concealed behind the film's black background. It fades in after 3.5 seconds of uninterrupted playback to avoid showing YouTube's opening thumbnail/title/button overlay. Buffering before that reveal cancels the reveal timer. Returning from the desktop catalog repeats this conceal/reveal sequence. Sound toggling while playing never resends a play command.
+- Autoplay denial leaves a play icon; player errors provide a link to watch the film. This is a startup-visibility treatment, not removal of YouTube's internal UI. A hosted MP4/WebM remains supported for an entirely unbranded player.
+- YouTube chooses stream quality automatically and no longer supports forcing playback quality. Guaranteed maximum-resolution playback is pending the original full-quality MP4/WebM or its hosted URL. Do not add ineffective `setPlaybackQuality`/`suggestedQuality` calls. Reference: https://developers.google.com/youtube/iframe_api_revision_history
 
 ## Content
 
