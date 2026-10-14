@@ -15,7 +15,7 @@ body { position: relative; height: auto; padding-block: var(--sky-bleed); overfl
 .film-frame { max-height: none; }
 .catalog-panel { padding: 0; scroll-margin-top: 20px; }
 .catalog-row { min-height: clamp(54px, 8svh, 76px); font-size: clamp(27px, 8.5vw, 45px); }
-.catalog-row[data-section="formal"] { --highlight-size: 82px auto, 0 0, 0 0, 76px auto; --highlight-position: -12px center, center, center, calc(100% + 12px) center; }
+.formal-flowers { transform: translate(-50%, -50%) scale(.75); }
 .experience > .controls { display: none; }
 .detail-content { align-items: center; }
 .detail h1 { font-size: clamp(49px, 15vw, 112px); }

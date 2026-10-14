@@ -47,12 +47,15 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
 .catalog-list { display: flex; flex-direction: column; }
 .catalog-row { position: relative; isolation: isolate; overflow: hidden; display: flex; justify-content: center; align-items: center; border: 2px solid currentColor; margin-top: -2px; min-height: clamp(66px, 11svh, 104px); font-family: var(--catalog-font); font-weight: 900; font-synthesis: weight; font-size: clamp(28px, 4.6vw, 62px); line-height: 1; letter-spacing: normal; text-align: center; text-transform: uppercase; transition: background-color 170ms ease, color 170ms ease; }
 .catalog-row:first-child { margin-top: 0; }
-.catalog-row::before { content: ''; position: absolute; z-index: -1; inset: 0; background-image: var(--highlight-image, none); background-position: var(--highlight-position, center); background-size: var(--highlight-size, cover); background-repeat: no-repeat; opacity: 0; pointer-events: none; transition: opacity 170ms ease; }
+.catalog-row::before { content: ''; position: absolute; z-index: -1; inset: 0; background-image: var(--highlight-image, none); background-position: var(--highlight-position, center); background-size: var(--highlight-size, cover); background-repeat: var(--highlight-repeat, no-repeat); opacity: 0; pointer-events: none; transition: opacity 170ms ease; }
 .catalog-row:is(:hover, :focus-visible, :active) { background-color: var(--highlight-color, #080a0d); color: var(--highlight-ink, #a9c3db); border-color: #080a0d; }
 .catalog-row:is(:hover, :focus-visible, :active)::before { opacity: var(--highlight-opacity, 1); }
 .catalog-row[data-section="studios"] { --highlight-color: #799dbb; --highlight-ink: #080a0d; --highlight-image: url('/assets/strikeout-sky.jpg'); --highlight-position: center 45%; }
 .catalog-row[data-section="dopo"] { --highlight-color: #fbae9d; --highlight-ink: #080a0d; }
-.catalog-row[data-section="formal"] { --highlight-color: #f7dbe5; --highlight-ink: #080a0d; --highlight-image: url('/assets/formal-flower.png'), url('/assets/formal-flower.png'), url('/assets/formal-flower.png'), url('/assets/formal-flower.png'); --highlight-size: 110px auto, 66px auto, 74px auto, 100px auto; --highlight-position: 8% 45%, 27% 15%, 74% 80%, 94% 55%; --highlight-opacity: .75; }
+.catalog-row[data-section="formal"] { --highlight-color: transparent; --highlight-ink: #080a0d; }
+.formal-flowers { position: absolute; z-index: -1; left: 50%; top: 50%; width: 1100px; height: 160px; transform: translate(-50%, -50%); opacity: 0; pointer-events: none; transition: opacity 170ms ease; }
+.formal-flowers i { position: absolute; display: block; aspect-ratio: 583 / 618; background: url('/assets/formal-flower.png') center / contain no-repeat; }
+.catalog-row:is(:hover, :focus-visible, :active) .formal-flowers { opacity: 1; }
 .controls { flex-shrink: 0; display: flex; justify-content: center; align-items: center; min-height: 44px; }
 .view-switch { width: 64px; height: 44px; border: 0; border-radius: 0; background: transparent; padding: 0 5px; position: relative; }
 .view-switch::before { content: ''; position: absolute; inset: 5px 0; border: 2px solid #080a0d; pointer-events: none; }
