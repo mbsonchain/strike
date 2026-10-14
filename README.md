@@ -25,3 +25,7 @@ First responsive design, using the original Strikeout sky photograph and S artwo
 No build dependencies. Run `npm run build`, then `npm run dev`. Open the printed local URL. `/mobile-preview` renders the real app directly with its mobile layout across the full available viewport: no iframe, phone-sized box, nested background or fixed 390 × 844 dimensions. Mobile styles live in `mobile.css`, loaded at the normal breakpoint or unconditionally in preview mode. Preview navigation keeps `?layout=mobile` so subpages, back navigation and reloads retain the mobile layout. Run `npm run check` for syntax validation and `npm test` for playback lifecycle tests. Vercel builds the static `dist` output.
 
 Only the two public-facing brand assets were copied from the backup. Store exports and theme backups are not part of this repository.
+
+## Releases
+
+The build fingerprints the HTML, styles and complete module graph into `/releases/<content-hash>/`. Every page loads its CSS and entry module from that directory, and relative imports load the same release's content/player modules. Changing a page's `?rev=` alone does not invalidate imported scripts or styles; release-specific asset URLs do. `/release.json` and the `strikeout-release` HTML meta identify the deployed build. Fingerprinted assets are immutable; the release manifest is never cached. Original root-level assets remain available for previously opened pages. Build tests verify all page references, imported modules and invalidation after a playback-only change.
