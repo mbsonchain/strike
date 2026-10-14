@@ -6,17 +6,13 @@ body { position: relative; height: auto; padding-block: var(--sky-bleed); overfl
 #app, .entrance, .experience, .detail { min-height: 100svh; min-height: 100dvh; }
 .enter img { width: 172px; }
 .experience, .detail { padding-inline: max(var(--edge), env(safe-area-inset-left), env(safe-area-inset-right)); padding-block: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-bottom)); text-align: center; }
-.experience { justify-content: center; align-items: center; gap: 28px; cursor: pointer; }
+.experience { justify-content: center; align-items: center; gap: 28px; }
 .site-logo { min-width: 48px; min-height: 48px; }
 .site-logo img { width: 46px; }
 .stage { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; gap: 28px; padding-bottom: 0; }
 .film-panel, .catalog-panel { margin: 0; width: 100%; max-width: none; }
 .film-panel { scroll-margin-top: 20px; }
 .film-frame { max-height: none; }
-.film-empty { gap: 6px; }
-.film-empty .film-label { font-size: 28px; }
-.film-empty p { font-size: 11px; }
-.film-caption { font-size: 14px; }
 .catalog-panel { padding: 0; scroll-margin-top: 20px; }
 .catalog-row { min-height: clamp(54px, 8svh, 76px); font-size: clamp(27px, 8.5vw, 45px); }
 .experience > .controls { display: none; }

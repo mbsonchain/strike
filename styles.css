@@ -14,7 +14,7 @@ body { margin: 0; min-width: 280px; background: transparent; -webkit-text-size-a
 /* The original Strikeout theme paints a full-viewport image behind transparent content. */
 .sky { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; }
 .sky img { display: block; width: 100%; height: 100%; object-fit: cover; }
-#app { position: relative; z-index: 1; width: 100%; min-height: 100%; }
+#app { position: relative; z-index: 1; width: 100%; min-height: 100%; touch-action: manipulation; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; color: inherit; appearance: none; -webkit-appearance: none; border-radius: 0; }
 a { color: inherit; text-decoration: none; }
@@ -27,8 +27,7 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
 .entrance { min-height: 100svh; display: grid; place-items: center; }
 .enter { border: 0; padding: 28px; background: transparent; line-height: 0; }
 .enter img { display: block; width: clamp(160px, 18vw, 240px); height: auto; }
-.experience { min-height: 100svh; display: flex; flex-direction: column; padding: var(--edge); gap: 24px; }
-.experience[data-view="video"] { cursor: pointer; }
+.experience { min-height: 100svh; display: flex; flex-direction: column; padding: var(--edge); gap: 24px; cursor: pointer; }
 .masthead { display: flex; justify-content: center; flex-shrink: 0; }
 .site-logo { display: flex; justify-content: center; align-items: center; min-width: 64px; min-height: 64px; line-height: 0; }
 .site-logo img { display: block; width: 62px; height: auto; }
@@ -36,21 +35,14 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
 .film-panel, .catalog-panel { grid-area: 1 / 1; width: min(100%, 960px); margin: auto; }
 .film-panel { max-width: min(760px, 70vw, calc((100svh - 240px) * 16 / 9)); }
 .film-frame { aspect-ratio: 16 / 9; width: 100%; border: 0; background: #090b10; position: relative; overflow: hidden; }
-.film-frame:has(.film-empty) { border: 1px solid rgba(8, 10, 13, .75); background: rgba(77, 105, 137, .12); }
-.film-frame iframe, .film-frame video { display: block; position: absolute; inset: 0; height: 100%; width: 100%; border: 0; object-fit: contain; }
-.film-frame iframe { pointer-events: none; }
+.film-frame video { display: block; position: absolute; inset: 0; height: 100%; width: 100%; border: 0; object-fit: contain; }
 .film-sound { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; appearance: none; -webkit-appearance: none; background: transparent; color: white; display: grid; place-items: center; }
 .film-sound:focus-visible::after { content: ''; position: absolute; bottom: 10px; width: 32px; height: 3px; background: #a9c3db; box-shadow: 0 1px 2px #000; }
 .film-sound:disabled { cursor: wait; }
-.play-symbol { display: none; font-family: Arial, sans-serif; font-size: 32px; text-shadow: 0 1px 5px #000; }
-.film-frame[data-blocked="true"] .play-symbol { display: block; }
+.film-retry { position: absolute; z-index: 2; inset: 0; border: 0; background: transparent; color: white; font: 32px Arial, sans-serif; text-shadow: 0 1px 5px #000; }
 .film-error { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; align-content: center; gap: 8px; margin: 0; padding: 24px; color: white; font-size: 14px; text-align: center; }
 .film-error a { text-decoration: underline; text-underline-offset: 3px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-.film-empty { height: 100%; display: grid; place-content: center; text-align: center; gap: 10px; }
-.film-empty p { margin: 0; font-size: 12px; font-weight: 600; }
-.film-empty .film-label { font-size: clamp(28px, 4vw, 52px); font-weight: 900; }
-.film-caption { margin: 14px 0 0; font-size: 16px; }
 .catalog-panel { padding: 22px 0; }
 .catalog-list { display: flex; flex-direction: column; }
 .catalog-row { display: flex; justify-content: center; align-items: center; border: 2px solid currentColor; margin-top: -2px; min-height: clamp(66px, 11svh, 104px); font-family: var(--catalog-font); font-weight: 900; font-synthesis: weight; font-size: clamp(28px, 4.6vw, 62px); line-height: 1; letter-spacing: normal; text-align: center; text-transform: uppercase; transition: background-color 170ms ease, color 170ms ease; }

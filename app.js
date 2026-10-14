@@ -20,16 +20,6 @@ function navigate(path) {
   scrollToContent();
 }
 
-function syncMedia() {
-  const experience = app.querySelector('.experience');
-  if (!experience) return;
-  const show = mobile.matches || experience.dataset.view === 'video';
-  if (show && !filmPlayer) filmPlayer = mountFilm(app.querySelector('.film-frame'), film);
-  filmPlayer?.setVisible(show);
-  // The two sections remain stacked on mobile; there is no mobile view control.
-  app.querySelector('.controls').hidden = mobile.matches;
-}
-
 function setView(view, updateHistory = true) {
   const experience = app.querySelector('.experience');
   if (!experience) return;
@@ -37,13 +27,17 @@ function setView(view, updateHistory = true) {
   const catalog = view === 'catalog';
   app.querySelector('.view-switch').setAttribute('aria-checked', String(catalog));
   if (updateHistory) history.replaceState({}, '', catalog ? '/#catalog' : '/#video');
-  syncMedia();
 }
 
 function render(focus = false) {
+  const slug = location.pathname === '/mobile-preview' ? '' : location.pathname.replace(/^\/+|\/+$/g, '');
+  // Hash navigation changes the view, never the running video element.
+  if (!slug && ['#video', '#catalog'].includes(location.hash) && app.querySelector('.experience')) {
+    setView(location.hash.slice(1), false);
+    return;
+  }
   filmPlayer?.destroy();
   filmPlayer = null;
-  const slug = location.pathname === '/mobile-preview' ? '' : location.pathname.replace(/^\/+|\/+$/g, '');
   const page = pages.find(item => item.slug === slug);
   document.title = page ? `${page.title} — Strikeout` : 'Strikeout';
   if (page || slug) {
@@ -58,7 +52,6 @@ function render(focus = false) {
   }
   if (!['#video', '#catalog'].includes(location.hash)) {
     app.innerHTML = '<section class="entrance" aria-label="Strikeout"><button class="enter" aria-label="Enter Strikeout"><img src="/assets/strikeout-s.png" alt="Strikeout S" width="480" height="445"></button></section>';
-    app.querySelector('.enter').addEventListener('click', () => navigate('/#video'));
     if (focus) app.querySelector('.enter').focus({ preventScroll: true });
     return;
   }
@@ -66,42 +59,40 @@ function render(focus = false) {
   app.innerHTML = `<div class="experience" data-view="${view}">
     ${logoMarkup}
     <div class="stage">
-      <section class="film-panel" aria-label="Strikeout film" tabindex="-1"><div class="film-frame"></div>${film.caption ? `<p class="film-caption">${escapeHtml(film.caption)}</p>` : ''}</section>
+      <section class="film-panel" aria-label="Strikeout film" tabindex="-1"><div class="film-frame"></div></section>
       <nav class="catalog-panel" aria-label="Strikeout catalog"><div class="catalog-list">${pages.map(item => `<a class="catalog-row" href="/${item.slug}">${escapeHtml(item.title)}</a>`).join('')}</div></nav>
     </div>
     <nav class="controls" aria-label="View navigation">
       <button class="view-switch" role="switch" aria-label="Catalog view" aria-checked="${view === 'catalog'}"><span></span></button>
     </nav>
   </div>`;
-  app.querySelector('.view-switch').addEventListener('click', () => setView(app.querySelector('.experience').dataset.view === 'video' ? 'catalog' : 'video'));
   setView(view, false);
+  filmPlayer = mountFilm(app.querySelector('.film-frame'), film);
   if (focus) (view === 'catalog' && !mobile.matches ? app.querySelector('.catalog-row') : app.querySelector('.film-panel')).focus({ preventScroll: true });
 }
 
 app.addEventListener('click', event => {
-  const link = event.target.closest('a');
-  if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  if (link.origin !== location.origin) return;
-  event.preventDefault();
-  navigate(`${link.pathname}${link.hash}`);
-});
-document.addEventListener('click', event => {
   if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  // Links and controls handle their own action; the film button already toggles sound.
-  if (event.target.closest('a, button, input, textarea, select, summary, [contenteditable], [role="button"], [role="switch"]')) return;
-  const experience = app.querySelector('.experience');
-  if (experience && (mobile.matches || experience.dataset.view === 'video')) filmPlayer?.toggleSound();
+  const control = event.target.closest('a, button, input, textarea, select, summary, [contenteditable], [role="button"], [role="switch"]');
+  if (control?.matches('a')) {
+    if (control.origin !== location.origin || control.target || control.hasAttribute('download')) return;
+    event.preventDefault();
+    navigate(`${control.pathname}${control.hash}`);
+  } else if (control?.matches('.enter')) {
+    navigate('/#video');
+  } else if (control?.matches('.view-switch')) {
+    setView(app.querySelector('.experience').dataset.view === 'video' ? 'catalog' : 'video');
+  } else if (!control || control.matches('.film-sound')) {
+    filmPlayer?.toggleSound();
+  }
 });
 window.addEventListener('popstate', () => { render(true); scrollToContent(); });
 window.addEventListener('hashchange', () => { render(); scrollToContent(); });
-mobile.addEventListener('change', () => {
-  syncMedia();
-  scrollToContent();
-});
+mobile.addEventListener('change', scrollToContent);
 window.addEventListener('pageshow', scrollToContent);
 window.addEventListener('resize', scrollToContent);
 window.addEventListener('keydown', event => {
-  handleSoundShortcut(event, filmPlayer, !mobile.matches && app.querySelector('.experience')?.dataset.view === 'video');
+  handleSoundShortcut(event, filmPlayer, !mobile.matches);
 });
 render();
 scrollToContent();
