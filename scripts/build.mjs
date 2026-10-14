@@ -27,4 +27,4 @@ for (const page of pages) {
 }
 await writeFile('dist/404.html', html.replace('<title>Strikeout</title>', '<title>Not found — Strikeout</title>'));
 await writeFile('dist/release.json', JSON.stringify({ release }) + '\n');
-console.log(`Built Strikeout release ${release}, entrance and ${pages.length} subpages.`);
+console.log(`Built Strikeout release ${release}, homepage and ${pages.length} subpages.`);

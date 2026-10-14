@@ -5,7 +5,7 @@ const app = document.querySelector('#app');
 const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
-const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout entrance"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
+const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout home"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
 
 function navigate(path) {
   const destination = new URL(path, location.origin);
@@ -49,12 +49,6 @@ function render(focus = false) {
       <nav class="controls" aria-label="Page navigation"><a class="back" href="/#catalog" aria-label="Back to catalog">←</a></nav>
     </section>`;
     if (focus) app.querySelector('h1').focus({ preventScroll: true });
-    return;
-  }
-  if (!['#video', '#catalog'].includes(location.hash)) {
-    app.innerHTML = '<section class="entrance" aria-label="Strikeout"><button class="enter" aria-label="Enter Strikeout"><img src="/assets/strikeout-s.png" alt="Strikeout S" width="480" height="445"></button></section>';
-    app.querySelector('.enter').addEventListener('click', () => navigate('/#video'));
-    if (focus) app.querySelector('.enter').focus({ preventScroll: true });
     return;
   }
   const view = location.hash === '#catalog' ? 'catalog' : 'video';
