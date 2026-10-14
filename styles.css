@@ -52,6 +52,8 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
 .catalog-row:is(:hover, :focus-visible, :active)::before { opacity: var(--highlight-opacity, 1); }
 .catalog-row[data-section="studios"] { --highlight-color: #799dbb; --highlight-ink: #080a0d; --highlight-image: url('/assets/strikeout-sky.jpg'); --highlight-position: center 45%; }
 .catalog-row[data-section="dopo"] { --highlight-color: #fbae9d; --highlight-ink: #080a0d; }
+.catalog-row[data-section="catalog"] { --highlight-color: #22c55e; --highlight-ink: #080a0d; }
+.catalog-row[data-section="about"] { --highlight-color: #e991c7; --highlight-ink: #080a0d; }
 .catalog-row[data-section="formal"] { --highlight-color: #fff; --highlight-ink: #080a0d; --highlight-image: url('/assets/formal-flower.png'), url('/assets/formal-flower.png'), url('/assets/formal-flower.png'); --highlight-size: min(52px, 30%) auto; --highlight-position: 6% center, center, 94% center; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(16px, 4vw, 52px); padding-inline: clamp(16px, 4vw, 52px); }
 .catalog-row[data-section="formal"]::before, .catalog-row[data-section="formal"]::after { content: ''; position: static; z-index: auto; width: 100%; height: 56px; background-image: var(--highlight-image); background-size: var(--highlight-size); background-position: var(--highlight-position); background-repeat: no-repeat; opacity: 0; pointer-events: none; transition: opacity 170ms ease; }
 .catalog-row[data-section="formal"]:is(:hover, :focus-visible, :active)::before, .catalog-row[data-section="formal"]:is(:hover, :focus-visible, :active)::after { opacity: 1; }
