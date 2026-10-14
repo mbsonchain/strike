@@ -6,7 +6,7 @@ body { position: relative; height: auto; padding-block: var(--sky-bleed); overfl
 #app, .entrance, .experience, .detail { min-height: 100svh; min-height: 100dvh; }
 .enter img { width: 172px; }
 .experience, .detail { padding-inline: max(var(--edge), env(safe-area-inset-left), env(safe-area-inset-right)); padding-block: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-bottom)); text-align: center; }
-.experience { justify-content: center; align-items: center; gap: 28px; }
+.experience { justify-content: center; align-items: center; gap: 28px; cursor: pointer; }
 .site-logo { min-width: 48px; min-height: 48px; }
 .site-logo img { width: 46px; }
 .stage { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; gap: 28px; padding-bottom: 0; }

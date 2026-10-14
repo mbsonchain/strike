@@ -28,6 +28,7 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
 .enter { border: 0; padding: 28px; background: transparent; line-height: 0; }
 .enter img { display: block; width: clamp(160px, 18vw, 240px); height: auto; }
 .experience { min-height: 100svh; display: flex; flex-direction: column; padding: var(--edge); gap: 24px; }
+.experience[data-view="video"] { cursor: pointer; }
 .masthead { display: flex; justify-content: center; flex-shrink: 0; }
 .site-logo { display: flex; justify-content: center; align-items: center; min-width: 64px; min-height: 64px; line-height: 0; }
 .site-logo img { display: block; width: 62px; height: auto; }

@@ -85,6 +85,13 @@ app.addEventListener('click', event => {
   event.preventDefault();
   navigate(`${link.pathname}${link.hash}`);
 });
+document.addEventListener('click', event => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  // Links and controls handle their own action; the film button already toggles sound.
+  if (event.target.closest('a, button, input, textarea, select, summary, [contenteditable], [role="button"], [role="switch"]')) return;
+  const experience = app.querySelector('.experience');
+  if (experience && (mobile.matches || experience.dataset.view === 'video')) filmPlayer?.toggleSound();
+});
 window.addEventListener('popstate', () => { render(true); scrollToContent(); });
 window.addEventListener('hashchange', () => { render(); scrollToContent(); });
 mobile.addEventListener('change', () => {
