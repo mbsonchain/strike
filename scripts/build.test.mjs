@@ -21,6 +21,11 @@ test('every page loads one complete release, and a playback-only update changes 
     for (const page of (await readdir(join(root, 'dist'))).filter(file => file.endsWith('.html'))) {
       const html = await readFile(join(root, 'dist', page), 'utf8');
       assert.ok(html.includes(`<meta name="strikeout-release" content="${release}">`), page);
+      if (page === 'mobile-preview.html') {
+        assert.ok(html.includes("frame.src = '/#video'"));
+        assert.ok(!html.includes('data-mobile-preview'));
+        continue;
+      }
       for (const asset of ['app.js', 'styles.css', 'mobile.css']) {
         assert.ok(html.includes(`/releases/${release}/${asset}`), `${page}: ${asset}`);
         assert.ok(!html.includes(`"/${asset}"`), `${page}: unversioned ${asset}`);

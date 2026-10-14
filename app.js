@@ -2,20 +2,13 @@ import { film, pages } from './content.js';
 import { mountFilm, handleSoundShortcut } from './media.js';
 
 const app = document.querySelector('#app');
-const preview = document.documentElement.hasAttribute('data-mobile-preview') || new URLSearchParams(location.search).get('layout') === 'mobile';
-if (preview) {
-  document.documentElement.setAttribute('data-mobile-preview', '');
-  document.querySelector('#mobile-styles').media = 'all';
-}
-const mobile = window.matchMedia(preview ? 'all' : '(max-width: 760px)');
-if (location.pathname === '/mobile-preview' && !location.hash) history.replaceState({}, '', `${location.pathname}${location.search}#video`);
+const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout entrance"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
 
 function navigate(path) {
   const destination = new URL(path, location.origin);
-  if (preview) destination.searchParams.set('layout', 'mobile');
   const next = `${destination.pathname}${destination.search}${destination.hash}`;
   if (`${location.pathname}${location.search}${location.hash}` !== next) history.pushState({}, '', next);
   render(true);
