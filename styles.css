@@ -6,9 +6,10 @@
   background: #769abe;
   font-synthesis: weight;
   --edge: clamp(22px, 3vw, 44px);
-  --catalog-font: "articulat-heavy-cf", "articulat-cf", Arial, Helvetica, sans-serif;
+  --catalog-font: "articulat-cf", sans-serif;
 }
 * { box-sizing: border-box; }
+html, body, #app { width: 100%; min-height: 100%; }
 body { margin: 0; min-width: 280px; min-height: 100svh; min-height: 100dvh; background: #769abe url('/assets/strikeout-sky.jpg') center / cover no-repeat; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; color: inherit; }
@@ -45,7 +46,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #fff; outline-offset:
 .film-caption { margin: 14px 0 0; font-size: 16px; }
 .catalog-panel { padding: 22px 0; }
 .catalog-list { display: flex; flex-direction: column; }
-.catalog-row { display: flex; justify-content: center; align-items: center; border: 2px solid currentColor; margin-top: -2px; min-height: clamp(66px, 11svh, 104px); font-family: var(--catalog-font); font-weight: 900; font-synthesis: none; font-size: clamp(28px, 4.6vw, 62px); line-height: 1; text-align: center; text-transform: uppercase; transition: background-color 170ms ease, color 170ms ease; }
+.catalog-row { display: flex; justify-content: center; align-items: center; border: 2px solid currentColor; margin-top: -2px; min-height: clamp(66px, 11svh, 104px); font-family: var(--catalog-font); font-weight: 900; font-synthesis: weight; font-size: clamp(28px, 4.6vw, 62px); line-height: 1; letter-spacing: normal; text-align: center; text-transform: uppercase; transition: background-color 170ms ease, color 170ms ease; }
 .catalog-row:first-child { margin-top: 0; }
 .catalog-row:hover { background: #080a0d; color: #a9c3db; border-color: #080a0d; }
 .controls { flex-shrink: 0; display: flex; justify-content: center; align-items: center; min-height: 44px; }
@@ -62,31 +63,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid #fff; outline-offset:
 .no-script { display: grid; place-content: center; min-height: 100svh; text-align: center; line-height: 2; }
 @keyframes arrive { from { opacity: 0; } to { opacity: 1; } }
 @media (min-width: 761px) {
-  .experience[data-view="video"] .catalog-panel { display: none; }
-  .experience[data-view="catalog"] .film-panel { display: none; }
-}
-@media (max-width: 760px) {
-  :root { --edge: 16px; }
-  .entrance, .experience, .detail { min-height: 100svh; min-height: 100dvh; }
-  .enter img { width: 172px; }
-  .experience, .detail { padding-inline: max(var(--edge), env(safe-area-inset-left), env(safe-area-inset-right)); padding-block: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-bottom)); text-align: center; }
-  .experience { justify-content: center; align-items: center; gap: 28px; }
-  .site-logo { min-width: 48px; min-height: 48px; }
-  .site-logo img { width: 46px; }
-  .stage { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; width: min(100%, 520px); gap: 28px; padding-bottom: 0; }
-  .film-panel, .catalog-panel { margin: 0; width: 100%; max-width: none; }
-  .film-panel { scroll-margin-top: 20px; }
-  .film-frame { max-height: none; }
-  .film-empty { gap: 6px; }
-  .film-empty .film-label { font-size: 28px; }
-  .film-empty p { font-size: 11px; }
-  .film-caption { font-size: 14px; }
-  .catalog-panel { padding: 0; scroll-margin-top: 20px; }
-  .catalog-row { min-height: clamp(54px, 8svh, 76px); font-size: clamp(27px, 8.5vw, 45px); }
-  .experience > .controls { display: none; }
-  .detail-content { align-items: center; }
-  .detail h1 { font-size: clamp(49px, 15vw, 112px); }
-  .detail .controls { gap: 12px; }
+  :root:not([data-mobile-preview]) .experience[data-view="video"] .catalog-panel { display: none; }
+  :root:not([data-mobile-preview]) .experience[data-view="catalog"] .film-panel { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

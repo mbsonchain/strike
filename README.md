@@ -4,8 +4,8 @@ First responsive design, using the original Strikeout sky photograph and S artwo
 
 - Click the stationary S to enter the film view. A smaller S stays centered at the top and returns to the entrance.
 - Desktop: a wordless switch at the bottom center changes between the smaller film and the five catalog rows.
-- Mobile (760px and below): logo, horizontal 16:9 film and all five catalog rows form one centered group. Film and catalog share a width capped at 520px; short screens scroll naturally. The sky is the document background, so it covers the complete page and mobile browser viewport changes.
-- Catalog labels use the actual Articulat Heavy CF 900 face from the existing Adobe kit. That face is registered separately from regular Articulat CF, which only supplies 400/700. Normal letter spacing is preserved.
+- Mobile (760px and below): logo, horizontal 16:9 film and all five catalog rows form one centered group. Film and catalog share the available width with 16px side gutters and safe-area padding; short screens scroll naturally. The sky is the document background, so it covers the complete page and mobile browser viewport changes.
+- Catalog labels match the saved Strikeout theme: `articulat-cf`, weight 900, normal letter spacing and weight synthesis allowed. The separate `articulat-heavy-cf` face was rejected by the user and is not used. Fonts are served by the existing Adobe kit.
 - Mobile has no toggle; film and catalog stay visible in one stacked layout.
 - The film has no decorative border or outer focus outline. Programmatic focus on its section does not draw a white frame; keyboard users retain focus indicators on interactive controls. The phone preview also uses the sky without a pale surround, frame or preview header.
 - Studios, Dopo, Formal, Catalog, and About have independent URLs with the top S and a back arrow. Page content is intentionally pending.
@@ -22,6 +22,6 @@ First responsive design, using the original Strikeout sky photograph and S artwo
 
 ## Preview
 
-No build dependencies. Run `npm run build`, then `npm run dev`. Open the printed local URL. `/mobile-preview` shows the real site in a centered 390px-wide viewport, up to 844px tall, with a sky surround. On phones it fills the available screen. Run `npm run check` for syntax validation and `npm test` for playback lifecycle tests. Vercel builds the static `dist` output.
+No build dependencies. Run `npm run build`, then `npm run dev`. Open the printed local URL. `/mobile-preview` renders the real app directly with its mobile layout across the full available viewport: no iframe, phone-sized box, nested background or fixed 390 × 844 dimensions. Mobile styles live in `mobile.css`, loaded at the normal breakpoint or unconditionally in preview mode. Preview navigation keeps `?layout=mobile` so subpages, back navigation and reloads retain the mobile layout. Run `npm run check` for syntax validation and `npm test` for playback lifecycle tests. Vercel builds the static `dist` output.
 
 Only the two public-facing brand assets were copied from the backup. Store exports and theme backups are not part of this repository.
