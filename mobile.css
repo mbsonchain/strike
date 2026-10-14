@@ -15,8 +15,8 @@ body { position: relative; height: auto; padding-block: var(--sky-bleed); overfl
 .film-frame { max-height: none; }
 .catalog-panel { padding: 0; scroll-margin-top: 20px; }
 .catalog-row { min-height: clamp(54px, 8svh, 76px); font-size: clamp(27px, 8.5vw, 45px); }
-.catalog-row[data-section="formal"] { --highlight-size: min(28px, 27%) auto; }
-.catalog-row[data-section="formal"]::before, .catalog-row[data-section="formal"]::after { height: 32px; }
+.catalog-row[data-section="formal"] { --highlight-size: min(30px, 30%) auto; gap: 16px; padding-inline: 8px; }
+.catalog-row[data-section="formal"]::before, .catalog-row[data-section="formal"]::after { height: 34px; }
 .experience > .controls { display: none; }
 .detail-content { align-items: center; }
 .detail h1 { font-size: clamp(49px, 15vw, 112px); }
