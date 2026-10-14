@@ -45,7 +45,7 @@ export function videoSource(raw, origin) {
 
 export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = location.origin } = {}) {
   const source = videoSource(film.url, origin);
-  let player, video, ready = false, disposed = false, visible = true, soundOn = source?.kind === 'file', playing = false;
+  let player, video, ready = false, disposed = false, visible = true, soundOn = false, playing = false, playRequest = 0;
   const button = document.createElement('button');
   button.className = 'film-sound';
   button.type = 'button';
@@ -64,15 +64,20 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     if (disposed || !visible) return;
     playing = false;
     frame.dataset.blocked = 'true';
-    button.setAttribute('aria-label', video ? 'Play film' : 'Play film and toggle sound');
+    button.setAttribute('aria-label', 'Play film and toggle sound');
   }
   function play() {
     if (!ready || disposed || !visible) return;
     if (video) {
+      const request = ++playRequest;
       video.muted = !soundOn;
       video.play().catch(error => {
-        // Navigating to the catalog can cancel an in-flight play request.
-        if (error.name !== 'AbortError') blocked();
+        if (disposed || !visible || request !== playRequest || error.name === 'AbortError') return;
+        // Playback takes priority if the browser rejects a later audible resume.
+        if (error.name === 'NotAllowedError' && soundOn) {
+          setSound(false);
+          play();
+        } else blocked();
       });
     }
     else player.playVideo();
@@ -90,6 +95,7 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     if (disposed) return;
     playing = false;
     ready = false;
+    playRequest++;
     player?.destroy();
     video?.pause();
     frame.replaceChildren();
@@ -108,8 +114,6 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   }
   function toggleSound() {
     if (!ready || disposed || !visible) return;
-    // A browser-blocked start needs a gesture to play with the chosen sound.
-    if (video && frame.dataset.blocked === 'true') { play(); return; }
     setSound(!soundOn);
     if (!playing) play();
   }
@@ -118,7 +122,6 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   if (!source) failed();
   else if (source.kind === 'file') {
     video = document.createElement('video');
-    video.src = source.url;
     video.muted = !soundOn;
     video.defaultMuted = !soundOn;
     video.autoplay = true;
@@ -137,6 +140,8 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     video.addEventListener('pause', () => { playing = false; });
     video.addEventListener('ended', blocked);
     video.addEventListener('error', failed);
+    // Set autoplay, muted and inline playback before the source starts loading.
+    video.src = source.url;
     frame.append(video, button, announcement);
     ready = true;
     button.disabled = false;
@@ -182,7 +187,7 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     setVisible(next) {
       const wasVisible = visible;
       visible = next;
-      if (!visible) playing = false;
+      if (!visible) { playing = false; playRequest++; }
       if (!ready || disposed) return;
       if (!visible) {
         if (video) {
@@ -194,6 +199,7 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     },
     destroy() {
       disposed = true;
+      playRequest++;
       if (video) { video.pause(); video.removeAttribute('src'); video.load(); }
       player?.destroy();
       frame.replaceChildren();

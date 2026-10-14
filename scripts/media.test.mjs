@@ -125,39 +125,40 @@ test('SDK failure gives a working external film link instead of an inert frame',
   assert.equal(frame.children[0].children[0].href, 'https://www.youtube.com/watch?v=cUV2OUpyYvk');
 });
 
-test('direct video defaults to sound on; click and Space toggle it and catalog preserves the choice', t => {
+test('direct video autoplays muted; click and Space toggle sound and catalog preserves the choice', t => {
   setup(t);
   const frame = new Element('div');
   const controller = mountFilm(frame, { ...film, url: 'https://media.example/ghost-town.mp4' }, { origin });
   const video = frame.children.find(node => node.tag === 'video');
   const button = frame.children.find(node => node.tag === 'button');
-  assert.equal(video.muted, false);
-  assert.equal(video.defaultMuted, false);
-  assert.equal(button.attributes['aria-pressed'], 'true');
+  assert.equal(video.muted, true);
+  assert.equal(video.defaultMuted, true);
+  assert.equal(button.attributes['aria-pressed'], 'false');
   assert.equal(video.autoplay, true);
   assert.equal(video.playsInline, true);
   assert.notEqual(video.controls, true);
+  assert.deepEqual(video.calls, ['play']);
   video.events.playing();
   video.calls.length = 0;
   button.events.click();
-  assert.equal(video.muted, true);
-  assert.equal(button.attributes['aria-pressed'], 'false');
+  assert.equal(video.muted, false);
+  assert.equal(button.attributes['aria-pressed'], 'true');
   assert.deepEqual(video.calls, []);
   controller.setVisible(false);
   assert.equal(video.muted, true);
   assert.equal(video.calls.at(-1), 'pause');
   controller.setVisible(true);
-  assert.equal(video.muted, true);
+  assert.equal(video.muted, false);
   video.events.playing();
   video.calls.length = 0;
   handleSoundShortcut({ code: 'Space', preventDefault() {} }, controller, true);
-  assert.equal(video.muted, false);
-  assert.equal(button.attributes['aria-pressed'], 'true');
+  assert.equal(video.muted, true);
+  assert.equal(button.attributes['aria-pressed'], 'false');
   assert.deepEqual(video.calls, []);
   controller.setVisible(false);
   assert.equal(video.muted, true);
   controller.setVisible(true);
-  assert.equal(video.muted, false);
+  assert.equal(video.muted, true);
   controller.destroy();
   assert.deepEqual(video.calls.slice(-2), ['pause', 'load']);
 });
@@ -173,10 +174,10 @@ test('direct video cannot restart in the hidden catalog after a delayed playing 
   assert.equal(video.muted, true);
   controller.setVisible(true);
   assert.equal(video.calls.at(-1), 'play');
-  assert.equal(video.muted, false);
+  assert.equal(video.muted, true);
   video.events.playing();
   controller.toggleSound();
-  assert.equal(video.muted, true);
+  assert.equal(video.muted, false);
   controller.destroy();
 });
 
@@ -197,8 +198,8 @@ test('native autoplay denial can be retried, while cancelled play requests are h
   controller.setVisible(true);
   await Promise.resolve();
   assert.equal(frame.dataset.blocked, 'true');
-  assert.equal(video.muted, false);
-  assert.equal(button.attributes['aria-label'], 'Play film');
+  assert.equal(video.muted, true);
+  assert.equal(button.attributes['aria-label'], 'Play film and toggle sound');
   video.play = () => { video.calls.push('play'); return Promise.resolve(); };
   button.events.click();
   assert.equal(video.calls.at(-1), 'play');
@@ -207,6 +208,50 @@ test('native autoplay denial can be retried, while cancelled play requests are h
   video.events.playing();
   assert.equal(frame.dataset.blocked, 'false');
   assert.equal(button.attributes['aria-label'], 'Film sound');
+  controller.destroy();
+});
+
+test('an audible resume denied by the browser retries muted without requiring a tap', async t => {
+  setup(t);
+  const frame = new Element('div');
+  const controller = mountFilm(frame, { ...film, url: 'https://media.example/ghost-town.mp4' }, { origin });
+  const video = frame.children.find(node => node.tag === 'video');
+  const button = frame.children.find(node => node.tag === 'button');
+  video.events.playing();
+  controller.toggleSound();
+  const attempts = [];
+  video.play = () => {
+    attempts.push(video.muted);
+    return video.muted ? Promise.resolve() : Promise.reject(Object.assign(new Error('Autoplay denied'), { name: 'NotAllowedError' }));
+  };
+  controller.setVisible(false);
+  controller.setVisible(true);
+  await Promise.resolve();
+  assert.deepEqual(attempts, [false, true]);
+  assert.equal(button.attributes['aria-pressed'], 'false');
+  assert.equal(frame.dataset.blocked, 'false');
+  controller.destroy();
+});
+
+test('a stale play rejection cannot block the current playback or mute a newer sound choice', async t => {
+  setup(t);
+  const frame = new Element('div');
+  const controller = mountFilm(frame, { ...film, url: 'https://media.example/ghost-town.mp4' }, { origin });
+  const video = frame.children.find(node => node.tag === 'video');
+  video.events.playing();
+  let rejectOldPlay;
+  video.play = () => new Promise((resolve, reject) => { rejectOldPlay = reject; });
+  controller.setVisible(false);
+  controller.setVisible(true);
+  controller.setVisible(false);
+  video.play = () => Promise.resolve();
+  controller.setVisible(true);
+  video.events.playing();
+  controller.toggleSound();
+  rejectOldPlay(Object.assign(new Error('Autoplay denied'), { name: 'NotAllowedError' }));
+  await Promise.resolve();
+  assert.equal(video.muted, false);
+  assert.equal(frame.dataset.blocked, 'false');
   controller.destroy();
 });
 
