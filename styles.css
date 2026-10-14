@@ -52,10 +52,7 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
 .catalog-row:is(:hover, :focus-visible, :active)::before { opacity: var(--highlight-opacity, 1); }
 .catalog-row[data-section="studios"] { --highlight-color: #799dbb; --highlight-ink: #080a0d; --highlight-image: url('/assets/strikeout-sky.jpg'); --highlight-position: center 45%; }
 .catalog-row[data-section="dopo"] { --highlight-color: #fbae9d; --highlight-ink: #080a0d; }
-.catalog-row[data-section="formal"] { --highlight-color: transparent; --highlight-ink: #080a0d; }
-.formal-flowers { position: absolute; z-index: -1; left: 50%; top: 50%; width: 1100px; height: 160px; transform: translate(-50%, -50%); opacity: 0; pointer-events: none; transition: opacity 170ms ease; }
-.formal-flowers i { position: absolute; display: block; aspect-ratio: 583 / 618; background: url('/assets/formal-flower.png') center / contain no-repeat; }
-.catalog-row:is(:hover, :focus-visible, :active) .formal-flowers { opacity: 1; }
+.catalog-row[data-section="formal"] { --highlight-color: #fff; --highlight-ink: #080a0d; --highlight-image: url('/assets/formal-flower.png'); --highlight-size: 46px auto; --highlight-repeat: repeat-x; }
 .controls { flex-shrink: 0; display: flex; justify-content: center; align-items: center; min-height: 44px; }
 .view-switch { width: 64px; height: 44px; border: 0; border-radius: 0; background: transparent; padding: 0 5px; position: relative; }
 .view-switch::before { content: ''; position: absolute; inset: 5px 0; border: 2px solid #080a0d; pointer-events: none; }

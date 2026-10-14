@@ -6,15 +6,6 @@ const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout entrance"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
-// A fixed collage keeps the flower placement stable across hover and navigation.
-const formalFlowers = `<span class="formal-flowers" aria-hidden="true">${Array.from({ length: 88 }, (_, index) => {
-  const column = index % 22;
-  const row = Math.floor(index / 22);
-  const x = column * 50 + (row % 2) * 23 + ((index * 17) % 23) - 11;
-  const y = row * 48 + ((index * 29) % 27) - 13;
-  const size = 68 + (index * 23) % 37;
-  return `<i style="left:${x}px;top:${y}px;width:${size}px;transform:translate(-50%,-50%) rotate(${(index * 137) % 360}deg)"></i>`;
-}).join('')}</span>`;
 
 function scrollToContent() {
   // Mobile sky continues above/below the content so Safari has image pixels behind its bars.
@@ -69,7 +60,7 @@ function render(focus = false) {
     ${logoMarkup}
     <div class="stage">
       <section class="film-panel" aria-label="Strikeout film" tabindex="-1"><div class="film-frame"></div></section>
-      <nav class="catalog-panel" aria-label="Strikeout catalog"><div class="catalog-list">${pages.map(item => `<a class="catalog-row" data-section="${item.slug}" href="/${item.slug}">${item.slug === 'formal' ? formalFlowers : ''}${escapeHtml(item.title)}</a>`).join('')}</div></nav>
+      <nav class="catalog-panel" aria-label="Strikeout catalog"><div class="catalog-list">${pages.map(item => `<a class="catalog-row" data-section="${item.slug}" href="/${item.slug}">${escapeHtml(item.title)}</a>`).join('')}</div></nav>
     </div>
     <nav class="controls" aria-label="View navigation">
       <button class="view-switch" role="switch" aria-label="Catalog view" aria-checked="${view === 'catalog'}"><span></span></button>
