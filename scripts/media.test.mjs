@@ -125,7 +125,7 @@ test('SDK failure gives a working external film link instead of an inert frame',
   assert.equal(frame.children[0].children[0].href, 'https://www.youtube.com/watch?v=cUV2OUpyYvk');
 });
 
-test('direct video autoplays muted; click and Space toggle sound and catalog preserves the choice', t => {
+test('direct video autoplays muted; click and Space toggle sound and catalog returns muted', t => {
   setup(t);
   const frame = new Element('div');
   const controller = mountFilm(frame, { ...film, url: 'https://media.example/ghost-town.mp4' }, { origin });
@@ -148,12 +148,13 @@ test('direct video autoplays muted; click and Space toggle sound and catalog pre
   assert.equal(video.muted, true);
   assert.equal(video.calls.at(-1), 'pause');
   controller.setVisible(true);
-  assert.equal(video.muted, false);
+  assert.equal(video.muted, true);
+  assert.equal(button.attributes['aria-pressed'], 'false');
   video.events.playing();
   video.calls.length = 0;
   handleSoundShortcut({ code: 'Space', preventDefault() {} }, controller, true);
-  assert.equal(video.muted, true);
-  assert.equal(button.attributes['aria-pressed'], 'false');
+  assert.equal(video.muted, false);
+  assert.equal(button.attributes['aria-pressed'], 'true');
   assert.deepEqual(video.calls, []);
   controller.setVisible(false);
   assert.equal(video.muted, true);
@@ -211,7 +212,7 @@ test('native autoplay denial can be retried, while cancelled play requests are h
   controller.destroy();
 });
 
-test('an audible resume denied by the browser retries muted without requiring a tap', async t => {
+test('returning to the film never attempts audible autoplay or requires a second tap', async t => {
   setup(t);
   const frame = new Element('div');
   const controller = mountFilm(frame, { ...film, url: 'https://media.example/ghost-town.mp4' }, { origin });
@@ -227,7 +228,7 @@ test('an audible resume denied by the browser retries muted without requiring a 
   controller.setVisible(false);
   controller.setVisible(true);
   await Promise.resolve();
-  assert.deepEqual(attempts, [false, true]);
+  assert.deepEqual(attempts, [true]);
   assert.equal(button.attributes['aria-pressed'], 'false');
   assert.equal(frame.dataset.blocked, 'false');
   controller.destroy();

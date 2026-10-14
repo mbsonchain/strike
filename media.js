@@ -70,14 +70,9 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     if (!ready || disposed || !visible) return;
     if (video) {
       const request = ++playRequest;
-      video.muted = !soundOn;
       video.play().catch(error => {
-        if (disposed || !visible || request !== playRequest || error.name === 'AbortError') return;
-        // Playback takes priority if the browser rejects a later audible resume.
-        if (error.name === 'NotAllowedError' && soundOn) {
-          setSound(false);
-          play();
-        } else blocked();
+        // Ignore a cancelled or superseded request when navigating between views.
+        if (request === playRequest && error.name !== 'AbortError') blocked();
       });
     }
     else player.playVideo();
@@ -122,8 +117,9 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   if (!source) failed();
   else if (source.kind === 'file') {
     video = document.createElement('video');
-    video.muted = !soundOn;
-    video.defaultMuted = !soundOn;
+    video.src = source.url;
+    video.muted = true;
+    video.defaultMuted = true;
     video.autoplay = true;
     video.playsInline = true;
     video.controls = false;
@@ -140,8 +136,6 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     video.addEventListener('pause', () => { playing = false; });
     video.addEventListener('ended', blocked);
     video.addEventListener('error', failed);
-    // Set autoplay, muted and inline playback before the source starts loading.
-    video.src = source.url;
     frame.append(video, button, announcement);
     ready = true;
     button.disabled = false;
@@ -190,11 +184,8 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
       if (!visible) { playing = false; playRequest++; }
       if (!ready || disposed) return;
       if (!visible) {
-        if (video) {
-          // Silence the hidden film without discarding the viewer's preference.
-          video.muted = true;
-          video.pause();
-        } else { setSound(false); player.pauseVideo(); }
+        setSound(false);
+        if (video) video.pause(); else player.pauseVideo();
       } else if (!wasVisible) play();
     },
     destroy() {
