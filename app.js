@@ -1,7 +1,9 @@
 import { film, pages } from './content.js';
 import { mountFilm, handleSoundShortcut } from './media.js';
+import { createDiagnostics } from './diagnostics.js';
 
 const app = document.querySelector('#app');
+const diagnostics = new URLSearchParams(location.search).get('diagnose') === '1' ? createDiagnostics(app) : null;
 const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -9,6 +11,7 @@ const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-lab
 
 function navigate(path) {
   const destination = new URL(path, location.origin);
+  if (diagnostics) destination.searchParams.set('diagnose', '1');
   const next = `${destination.pathname}${destination.search}${destination.hash}`;
   if (`${location.pathname}${location.search}${location.hash}` !== next) history.pushState({}, '', next);
   render(true);
@@ -19,7 +22,7 @@ function syncMedia() {
   const experience = app.querySelector('.experience');
   if (!experience) return;
   const show = mobile.matches || experience.dataset.view === 'video';
-  if (show && !filmPlayer) filmPlayer = mountFilm(app.querySelector('.film-frame'), film);
+  if (show && !filmPlayer) filmPlayer = mountFilm(app.querySelector('.film-frame'), film, { onPlayError: diagnostics?.playError });
   filmPlayer?.setVisible(show);
   // The two sections remain stacked on mobile; there is no mobile view control.
   app.querySelector('.controls').hidden = mobile.matches;

@@ -43,7 +43,7 @@ export function videoSource(raw, origin) {
   return null;
 }
 
-export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = location.origin } = {}) {
+export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = location.origin, onPlayError = () => {} } = {}) {
   const source = videoSource(film.url, origin);
   let player, video, ready = false, disposed = false, visible = true, soundOn = false, playing = false, playRequest = 0;
   const button = document.createElement('button');
@@ -72,6 +72,7 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
       const request = ++playRequest;
       video.muted = !soundOn;
       video.play().catch(error => {
+        onPlayError({ name: error.name, message: error.message });
         if (disposed || !visible || request !== playRequest || error.name === 'AbortError') return;
         // Playback takes priority if the browser rejects a later audible resume.
         if (error.name === 'NotAllowedError' && soundOn) {

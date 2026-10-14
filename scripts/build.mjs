@@ -2,7 +2,7 @@ import { mkdir, copyFile, cp, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { pages } from '../content.js';
 
-const runtimeFiles = ['app.js', 'media.js', 'content.js', 'styles.css', 'mobile.css'];
+const runtimeFiles = ['app.js', 'media.js', 'content.js', 'diagnostics.js', 'styles.css', 'mobile.css'];
 const sources = new Map(await Promise.all([...runtimeFiles, 'index.html', 'mobile-preview.html'].map(async file => [file, await readFile(file, 'utf8')])));
 const hash = createHash('sha256');
 for (const [file, source] of sources) hash.update(file).update('\0').update(source).update('\0');

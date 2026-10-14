@@ -26,6 +26,8 @@ No build dependencies. Run `npm run build`, then `npm run dev`. Open the printed
 
 Browser checks for the simplified layout: actual homepage at 390 × 844, 375 × 667 and 320 × 568; sky covers the viewport and the short screen's scrolled area; no horizontal overflow or mobile view toggle. Video time advances while muted, tapping unmutes without pausing, desktop Space toggles sound, and the catalog pauses playback. Desktop preview's embedded viewport measures exactly 390 × 844; phone preview URLs redirect to the real homepage. These are browser viewport checks, not verification of physical iPhone Safari's native toolbars.
 
+The user subsequently confirmed both issues persist in Safari on iPhone 17: blue top/bottom regions and film playback requiring repeated taps, with Low Power Mode off. This is unresolved. `/?diagnose=1` enables a device-local Copy Safari report button that records viewport units/safe areas, the loaded release, media events and rejected play requests. Tap the entrance S once, wait for the failure, then copy the report. No diagnostic data is sent to a server, persisted or collected on normal visits. The report is needed before making another device-specific change; desktop viewport checks are insufficient evidence for this failure.
+
 Only the two public-facing brand assets were copied from the backup. Store exports and theme backups are not part of this repository.
 
 ## Releases
