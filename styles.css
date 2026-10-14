@@ -52,7 +52,9 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
 .catalog-row:is(:hover, :focus-visible, :active)::before { opacity: var(--highlight-opacity, 1); }
 .catalog-row[data-section="studios"] { --highlight-color: #799dbb; --highlight-ink: #080a0d; --highlight-image: url('/assets/strikeout-sky.jpg'); --highlight-position: center 45%; }
 .catalog-row[data-section="dopo"] { --highlight-color: #fbae9d; --highlight-ink: #080a0d; }
-.catalog-row[data-section="formal"] { --highlight-color: #fff; --highlight-ink: #080a0d; --highlight-image: url('/assets/formal-flower.png'); --highlight-size: 46px auto; --highlight-repeat: repeat-x; }
+.catalog-row[data-section="formal"] { --highlight-color: #fff; --highlight-ink: #080a0d; --highlight-image: url('/assets/formal-flower.png'), url('/assets/formal-flower.png'), url('/assets/formal-flower.png'); --highlight-size: min(46px, 27%) auto; --highlight-position: left center, center, right center; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(10px, 2vw, 28px); padding-inline: clamp(10px, 2vw, 28px); }
+.catalog-row[data-section="formal"]::before, .catalog-row[data-section="formal"]::after { content: ''; position: static; z-index: auto; width: 100%; height: 50px; background-image: var(--highlight-image); background-size: var(--highlight-size); background-position: var(--highlight-position); background-repeat: no-repeat; opacity: 0; pointer-events: none; transition: opacity 170ms ease; }
+.catalog-row[data-section="formal"]:is(:hover, :focus-visible, :active)::before, .catalog-row[data-section="formal"]:is(:hover, :focus-visible, :active)::after { opacity: 1; }
 .controls { flex-shrink: 0; display: flex; justify-content: center; align-items: center; min-height: 44px; }
 .view-switch { width: 64px; height: 44px; border: 0; border-radius: 0; background: transparent; padding: 0 5px; position: relative; }
 .view-switch::before { content: ''; position: absolute; inset: 5px 0; border: 2px solid #080a0d; pointer-events: none; }
