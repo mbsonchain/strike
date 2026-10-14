@@ -3,7 +3,8 @@
   font-family: articulat-cf, Arial, Helvetica, sans-serif;
   font-weight: 900;
   color: #080a0d;
-  background: #769abe;
+  /* Keep the root transparent so the body's sky paints the page canvas. */
+  background: transparent;
   font-synthesis: weight;
   --edge: clamp(22px, 3vw, 44px);
   --catalog-font: "articulat-cf", sans-serif;
@@ -12,10 +13,12 @@
 html, body, #app { width: 100%; min-height: 100%; }
 body { margin: 0; min-width: 280px; min-height: 100svh; min-height: 100dvh; background: #769abe url('/assets/strikeout-sky.jpg') center / cover no-repeat; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 button, a { -webkit-tap-highlight-color: transparent; }
-button { font: inherit; color: inherit; }
+button { font: inherit; color: inherit; appearance: none; -webkit-appearance: none; border-radius: 0; }
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; }
-button:focus-visible, a:focus-visible { outline: 3px solid #fff; outline-offset: 7px; }
+button:focus, a:focus { outline: none; box-shadow: none; }
+a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .18em; }
+.enter:focus-visible img, .site-logo:focus-visible img { opacity: .55; }
 .film-panel:focus, .detail h1:focus { outline: none; }
 [hidden] { display: none !important; }
 .entrance { min-height: 100svh; display: grid; place-items: center; }
@@ -33,7 +36,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #fff; outline-offset:
 .film-frame iframe, .film-frame video { display: block; position: absolute; inset: 0; height: 100%; width: 100%; border: 0; object-fit: contain; }
 .film-frame iframe { pointer-events: none; }
 .film-sound { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; appearance: none; -webkit-appearance: none; background: transparent; color: white; display: grid; place-items: center; }
-.film-sound:focus-visible { outline-offset: -4px; }
+.film-sound:focus-visible::after { content: ''; position: absolute; bottom: 10px; width: 32px; height: 3px; background: #a9c3db; box-shadow: 0 1px 2px #000; }
 .film-sound:disabled { cursor: wait; }
 .play-symbol { display: none; font-family: Arial, sans-serif; font-size: 32px; text-shadow: 0 1px 5px #000; }
 .film-frame[data-blocked="true"] .play-symbol { display: block; }
@@ -48,10 +51,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid #fff; outline-offset:
 .catalog-list { display: flex; flex-direction: column; }
 .catalog-row { display: flex; justify-content: center; align-items: center; border: 2px solid currentColor; margin-top: -2px; min-height: clamp(66px, 11svh, 104px); font-family: var(--catalog-font); font-weight: 900; font-synthesis: weight; font-size: clamp(28px, 4.6vw, 62px); line-height: 1; letter-spacing: normal; text-align: center; text-transform: uppercase; transition: background-color 170ms ease, color 170ms ease; }
 .catalog-row:first-child { margin-top: 0; }
-.catalog-row:hover { background: #080a0d; color: #a9c3db; border-color: #080a0d; }
+.catalog-row:hover, .catalog-row:focus-visible { background: #080a0d; color: #a9c3db; border-color: #080a0d; }
 .controls { flex-shrink: 0; display: flex; justify-content: center; align-items: center; min-height: 44px; }
 .view-switch { width: 64px; height: 44px; border: 0; border-radius: 0; background: transparent; padding: 0 5px; position: relative; }
 .view-switch::before { content: ''; position: absolute; inset: 5px 0; border: 2px solid #080a0d; pointer-events: none; }
+.view-switch:focus-visible::after { content: ''; position: absolute; bottom: 0; left: 18px; width: 28px; height: 3px; background: currentColor; }
 .view-switch span { display: block; width: 26px; height: 24px; background: #080a0d; transition: transform 200ms ease; }
 .view-switch[aria-checked="true"] span { transform: translateX(26px); }
 .detail { min-height: 100svh; display: flex; flex-direction: column; padding: var(--edge); gap: 24px; animation: arrive 350ms ease both; }
