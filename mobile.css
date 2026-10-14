@@ -1,6 +1,6 @@
-:root { --edge: 16px; }
-/* Paint real document content beyond both viewport edges. Fixed layers stop at Safari's bars. */
-body { position: relative; height: auto; padding-block: 160px; }
+:root { --edge: 16px; --sky-bleed: 50lvh; background-color: #799dbb; overflow: hidden; overscroll-behavior: none; }
+/* Keep real sky pixels beneath Safari's bars, without making the page draggable. */
+body { position: relative; height: auto; padding-block: var(--sky-bleed); overflow: hidden; overscroll-behavior: none; touch-action: pinch-zoom; }
 .sky { position: absolute; inset: 0; height: auto; transform: none; }
 .sky img { position: absolute; inset: 0; }
 #app, .entrance, .experience, .detail { min-height: 100svh; min-height: 100dvh; }
@@ -23,3 +23,9 @@ body { position: relative; height: auto; padding-block: 160px; }
 .detail-content { align-items: center; }
 .detail h1 { font-size: clamp(49px, 15vw, 112px); }
 .detail .controls { gap: 12px; }
+@media (max-height: 700px) {
+  .experience { gap: 16px; padding-block: 16px; }
+  .stage { gap: 16px; }
+  .catalog-row { min-height: 44px; font-size: clamp(24px, 7vw, 36px); }
+  .film-panel { max-width: min(100%, calc((100dvh - 340px) * 16 / 9)); }
+}

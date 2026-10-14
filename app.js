@@ -85,15 +85,14 @@ app.addEventListener('click', event => {
   event.preventDefault();
   navigate(`${link.pathname}${link.hash}`);
 });
-window.addEventListener('popstate', () => render(true));
-window.addEventListener('hashchange', () => render());
+window.addEventListener('popstate', () => { render(true); scrollToContent(); });
+window.addEventListener('hashchange', () => { render(); scrollToContent(); });
 mobile.addEventListener('change', () => {
   syncMedia();
   scrollToContent();
 });
-window.addEventListener('pageshow', () => {
-  if (window.scrollY < app.offsetTop) scrollToContent();
-});
+window.addEventListener('pageshow', scrollToContent);
+window.addEventListener('resize', scrollToContent);
 window.addEventListener('keydown', event => {
   handleSoundShortcut(event, filmPlayer, !mobile.matches && app.querySelector('.experience')?.dataset.view === 'video');
 });
