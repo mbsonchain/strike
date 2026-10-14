@@ -45,7 +45,7 @@ export function videoSource(raw, origin) {
 
 export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = location.origin } = {}) {
   const source = videoSource(film.url, origin);
-  let player, video, ready = false, disposed = false, visible = true, soundOn = false, playing = false;
+  let player, video, ready = false, disposed = false, visible = true, soundOn = source?.kind === 'file', playing = false;
   const button = document.createElement('button');
   button.className = 'film-sound';
   button.type = 'button';
@@ -64,14 +64,17 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     if (disposed || !visible) return;
     playing = false;
     frame.dataset.blocked = 'true';
-    button.setAttribute('aria-label', 'Play film and toggle sound');
+    button.setAttribute('aria-label', video ? 'Play film' : 'Play film and toggle sound');
   }
   function play() {
     if (!ready || disposed || !visible) return;
-    if (video) video.play().catch(error => {
-      // Navigating to the catalog can cancel an in-flight play request.
-      if (error.name !== 'AbortError') blocked();
-    });
+    if (video) {
+      video.muted = !soundOn;
+      video.play().catch(error => {
+        // Navigating to the catalog can cancel an in-flight play request.
+        if (error.name !== 'AbortError') blocked();
+      });
+    }
     else player.playVideo();
   }
   function setSound(enabled) {
@@ -105,6 +108,8 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   }
   function toggleSound() {
     if (!ready || disposed || !visible) return;
+    // A browser-blocked start needs a gesture to play with the chosen sound.
+    if (video && frame.dataset.blocked === 'true') { play(); return; }
     setSound(!soundOn);
     if (!playing) play();
   }
@@ -114,8 +119,8 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
   else if (source.kind === 'file') {
     video = document.createElement('video');
     video.src = source.url;
-    video.muted = true;
-    video.defaultMuted = true;
+    video.muted = !soundOn;
+    video.defaultMuted = !soundOn;
     video.autoplay = true;
     video.playsInline = true;
     video.controls = false;
@@ -133,20 +138,6 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
     video.addEventListener('ended', blocked);
     video.addEventListener('error', failed);
     frame.append(video, button, announcement);
-    if (film.displayTitle) {
-      const heading = document.createElement('div');
-      heading.className = 'film-title';
-      const title = document.createElement('span');
-      title.textContent = film.displayTitle;
-      heading.append(title);
-      if (film.byline) {
-        const byline = document.createElement('span');
-        byline.className = 'film-byline';
-        byline.textContent = film.byline;
-        heading.append(byline);
-      }
-      frame.append(heading);
-    }
     ready = true;
     button.disabled = false;
     play();
@@ -194,8 +185,11 @@ export function mountFilm(frame, film, { loadPlayer = loadYouTube, origin = loca
       if (!visible) playing = false;
       if (!ready || disposed) return;
       if (!visible) {
-        setSound(false);
-        if (video) video.pause(); else player.pauseVideo();
+        if (video) {
+          // Silence the hidden film without discarding the viewer's preference.
+          video.muted = true;
+          video.pause();
+        } else { setSound(false); player.pauseVideo(); }
       } else if (!wasVisible) play();
     },
     destroy() {
