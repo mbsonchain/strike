@@ -5,14 +5,19 @@ const app = document.querySelector('#app');
 const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
-const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout home"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
+const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout entrance"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
+
+function scrollToContent() {
+  // Mobile sky continues above/below the content so Safari has image pixels behind its bars.
+  window.scrollTo({ top: app.offsetTop, left: 0, behavior: 'instant' });
+}
 
 function navigate(path) {
   const destination = new URL(path, location.origin);
   const next = `${destination.pathname}${destination.search}${destination.hash}`;
   if (`${location.pathname}${location.search}${location.hash}` !== next) history.pushState({}, '', next);
   render(true);
-  window.scrollTo(0, 0);
+  scrollToContent();
 }
 
 function syncMedia() {
@@ -51,6 +56,12 @@ function render(focus = false) {
     if (focus) app.querySelector('h1').focus({ preventScroll: true });
     return;
   }
+  if (!['#video', '#catalog'].includes(location.hash)) {
+    app.innerHTML = '<section class="entrance" aria-label="Strikeout"><button class="enter" aria-label="Enter Strikeout"><img src="/assets/strikeout-s.png" alt="Strikeout S" width="480" height="445"></button></section>';
+    app.querySelector('.enter').addEventListener('click', () => navigate('/#video'));
+    if (focus) app.querySelector('.enter').focus({ preventScroll: true });
+    return;
+  }
   const view = location.hash === '#catalog' ? 'catalog' : 'video';
   app.innerHTML = `<div class="experience" data-view="${view}">
     ${logoMarkup}
@@ -76,8 +87,15 @@ app.addEventListener('click', event => {
 });
 window.addEventListener('popstate', () => render(true));
 window.addEventListener('hashchange', () => render());
-mobile.addEventListener('change', syncMedia);
+mobile.addEventListener('change', () => {
+  syncMedia();
+  scrollToContent();
+});
+window.addEventListener('pageshow', () => {
+  if (window.scrollY < app.offsetTop) scrollToContent();
+});
 window.addEventListener('keydown', event => {
   handleSoundShortcut(event, filmPlayer, !mobile.matches && app.querySelector('.experience')?.dataset.view === 'video');
 });
 render();
+scrollToContent();

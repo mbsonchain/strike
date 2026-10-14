@@ -1,5 +1,10 @@
 :root { --edge: 16px; }
-.experience, .detail { min-height: 100svh; min-height: 100dvh; }
+/* Paint real document content beyond both viewport edges. Fixed layers stop at Safari's bars. */
+body { position: relative; height: auto; padding-block: 160px; }
+.sky { position: absolute; inset: 0; height: auto; transform: none; }
+.sky img { position: absolute; inset: 0; }
+#app, .entrance, .experience, .detail { min-height: 100svh; min-height: 100dvh; }
+.enter img { width: 172px; }
 .experience, .detail { padding-inline: max(var(--edge), env(safe-area-inset-left), env(safe-area-inset-right)); padding-block: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-bottom)); text-align: center; }
 .experience { justify-content: center; align-items: center; gap: 28px; }
 .site-logo { min-width: 48px; min-height: 48px; }
