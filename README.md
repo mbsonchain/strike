@@ -4,8 +4,10 @@ First responsive design, using the original Strikeout sky photograph and S artwo
 
 - Click the stationary S to enter the film view. A smaller S stays centered at the top and returns to the entrance.
 - Desktop: a wordless switch at the bottom center changes between the smaller film and the five catalog rows.
-- Mobile (760px and below): horizontal 16:9 film, then all five catalog rows, in one continuous view.
+- Mobile (760px and below): logo, horizontal 16:9 film and all five catalog rows form one centered group. Film and catalog share a width capped at 520px; short screens scroll naturally. The sky is the document background, so it covers the complete page and mobile browser viewport changes.
+- Catalog labels use the actual Articulat Heavy CF 900 face from the existing Adobe kit. That face is registered separately from regular Articulat CF, which only supplies 400/700. Normal letter spacing is preserved.
 - Mobile has no toggle; film and catalog stay visible in one stacked layout.
+- The film has no decorative border or outer focus outline. Programmatic focus on its section does not draw a white frame; keyboard users retain focus indicators on interactive controls. The phone preview also uses the sky without a pale surround, frame or preview header.
 - Studios, Dopo, Formal, Catalog, and About have independent URLs with the top S and a back arrow. Page content is intentionally pending.
 - Film starts with sound enabled, with native player controls hidden. The entrance click starts playback in the same user gesture. Click/tap the playing film (or use the focused button with Enter/Space) to toggle sound. Switching to the desktop catalog mutes and pauses; returning resumes at the same point with the viewer's sound preference. Navigation destroys the old player. Delayed playback events cannot resume a hidden film.
 - Desktop Space toggles film sound whenever the film view is active. Held keys do not repeat the action; links, buttons, form fields, modified shortcuts and mobile layouts retain their normal keyboard behavior.
@@ -20,6 +22,6 @@ First responsive design, using the original Strikeout sky photograph and S artwo
 
 ## Preview
 
-No build dependencies. Run `npm run build`, then `npm run dev`. Open the printed local URL. `/mobile-preview` shows the real site inside a 390 × 844 frame. Run `npm run check` for syntax validation and `npm test` for playback lifecycle tests. Vercel builds the static `dist` output.
+No build dependencies. Run `npm run build`, then `npm run dev`. Open the printed local URL. `/mobile-preview` shows the real site in a centered 390px-wide viewport, up to 844px tall, with a sky surround. On phones it fills the available screen. Run `npm run check` for syntax validation and `npm test` for playback lifecycle tests. Vercel builds the static `dist` output.
 
 Only the two public-facing brand assets were copied from the backup. Store exports and theme backups are not part of this repository.
