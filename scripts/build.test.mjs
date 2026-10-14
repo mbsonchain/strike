@@ -12,7 +12,7 @@ const sourceRoot = new URL('../', import.meta.url);
 test('every page loads one complete release, and a playback-only update changes all asset addresses', async t => {
   const root = await mkdtemp(join(tmpdir(), 'strikeout-build-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  for (const file of ['package.json', 'scripts', 'assets', 'index.html', 'mobile-preview.html', 'app.js', 'media.js', 'content.js', 'diagnostics.js', 'styles.css', 'mobile.css']) {
+  for (const file of ['package.json', 'scripts', 'assets', 'index.html', 'mobile-preview.html', 'app.js', 'media.js', 'content.js', 'styles.css', 'mobile.css']) {
     await cp(new URL(file, sourceRoot), join(root, file), { recursive: true });
   }
   async function build() {
@@ -31,7 +31,7 @@ test('every page loads one complete release, and a playback-only update changes 
         assert.ok(!html.includes(`"/${asset}"`), `${page}: unversioned ${asset}`);
       }
     }
-    for (const file of ['app.js', 'media.js', 'content.js', 'diagnostics.js', 'styles.css', 'mobile.css']) {
+    for (const file of ['app.js', 'media.js', 'content.js', 'styles.css', 'mobile.css']) {
       assert.equal(await readFile(join(root, 'dist/releases', release, file), 'utf8'), await readFile(join(root, file), 'utf8'));
     }
     const app = await readFile(join(root, 'dist/releases', release, 'app.js'), 'utf8');
