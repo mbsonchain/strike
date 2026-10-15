@@ -74,6 +74,8 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
   .experience { padding-inline: 0; }
   .catalog-panel { width: 100%; }
   .catalog-row { border-inline: 0; }
+  .catalog-row:first-child { border-top: 0; }
+  .catalog-row:last-child { border-bottom: 0; }
   .catalog-row[data-section="catalog"] { padding-inline: max(clamp(16px, 4vw, 52px), calc((100% - 960px) / 2 + 52px)); }
   .catalog-row:hover { background-color: var(--highlight-color, #080a0d); color: var(--highlight-ink, #a9c3db); border-color: #080a0d; }
   .catalog-row:hover::before, .catalog-row[data-section="catalog"]:hover::after { opacity: 1; }
