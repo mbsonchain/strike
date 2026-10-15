@@ -16,9 +16,13 @@ A static site using the original Strikeout sky photograph, S artwork and Articul
 
 `content.js` contains the hosted native video URL, accessible title, poster and catalog entries. Full movies stay outside Git. The web copy preserves the supplied master's 1920 × 1080 resolution and 24000/1001 frame rate, using H.264 CRF 16 with AAC 320 kb/s audio and fast-start metadata. There are no automatic resolution downgrades. The original master and its opening frames are unchanged.
 
+The film is served directly from Cloudflare R2 through `media.strikeout.us`, outside Vercel Blob and Vercel's video transfer usage. The website remains on Vercel. R2 outgoing transfer is free; storage and request allowances still apply. Use versioned object names, `video/mp4`, long-lived immutable caching and byte-range delivery. Upload credentials are temporary and never included in the site or repository.
+
 ## Development and verification
 
 Run `npm run build`, then `npm run dev`. Run `npm run check` and `npm test` for syntax, playback invariants and complete-release checks.
+
+Local previews always replace the hosted film URL with `/__local-film.mp4`. The development server streams `../media/strikeout/ghost-town-1080p.mp4`, or the path specified by `LOCAL_FILM_PATH`, with byte-range support. If that file is missing, playback stays unavailable locally; it never falls back to the hosted film. Keep full movies outside Git and outside temporary directories. Use local playback for design and interaction testing. Production hosting checks should use HEAD or small byte ranges, followed by one brief playback verification after a source change.
 
 Tests verify that sound toggles issue no play/pause/load/seek operations, including before playback starts and while paused or buffering. Browser checks cover autoplay, consecutive sound taps, uninterrupted time across the desktop switch, navigation and keyboard controls. Mobile-sized Chromium checks do not establish physical iPhone Safari behavior.
 
