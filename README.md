@@ -18,6 +18,8 @@ A static site using the original Strikeout sky photograph, S artwork and Articul
 
 The film is served directly from Cloudflare R2 through `media.strikeout.us`, outside Vercel Blob and Vercel's video transfer usage. The website remains on Vercel. R2 outgoing transfer is free; storage and request allowances still apply. Use versioned object names, `video/mp4`, long-lived immutable caching and byte-range delivery. Upload credentials are temporary and never included in the site or repository.
 
+Cloudflare has two ordered cache rules scoped to `https://media.strikeout.us/*.mp4*`: first preserve strong ETags, then bypass edge cache so R2 receives the browser's range requests directly. This follows [Cloudflare's Safari MP4 guidance](https://developers.cloudflare.com/cache/troubleshooting/mp4-videos-on-ios-and-safari/). Browser caching still respects the object's immutable cache header. Verify actual GET ranges, including `bytes=0-1`; an `Accept-Ranges` header alone does not establish that streaming works.
+
 ## Development and verification
 
 Run `npm run build`, then `npm run dev`. Run `npm run check` and `npm test` for syntax, playback invariants and complete-release checks.
