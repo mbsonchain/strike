@@ -77,6 +77,13 @@ app.addEventListener('click', event => {
   if (control?.matches('a')) {
     if (control.origin !== location.origin || control.target || control.hasAttribute('download')) return;
     event.preventDefault();
+    // Pointer taps preview a mobile section before opening it; keyboard links stay direct.
+    if (mobile.matches && event.detail > 0 && control.matches('.catalog-row') && !control.hasAttribute('data-preview')) {
+      app.querySelector('.catalog-row[data-preview]')?.removeAttribute('data-preview');
+      control.setAttribute('data-preview', '');
+      scrollToContent();
+      return;
+    }
     navigate(`${control.pathname}${control.hash}`);
   } else if (control?.matches('.enter')) {
     navigate('/#video');
@@ -88,7 +95,10 @@ app.addEventListener('click', event => {
 });
 window.addEventListener('popstate', () => { render(true); scrollToContent(); });
 window.addEventListener('hashchange', () => { render(); scrollToContent(); });
-mobile.addEventListener('change', scrollToContent);
+mobile.addEventListener('change', () => {
+  app.querySelector('.catalog-row[data-preview]')?.removeAttribute('data-preview');
+  scrollToContent();
+});
 window.addEventListener('pageshow', scrollToContent);
 window.addEventListener('resize', scrollToContent);
 window.addEventListener('keydown', event => {
