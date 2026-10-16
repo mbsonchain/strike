@@ -1,10 +1,10 @@
 import { dopo } from './content.js';
 
 const back = '<nav class="controls" aria-label="Page navigation"><a class="back" href="/#catalog" aria-label="Back to catalog">←</a></nav>';
-const frameUrl = new URL('./catalog-frame.html', import.meta.url).pathname;
+const frameUrl = 'https://desertformal.com/embed/network';
 const archiveFolders = numbers => `<div class="archive-folders" aria-label="Catalog archives ${numbers[0]}–${numbers.at(-1)}">${numbers.map(n => `<details class="archive-folder"><summary><span class="folder-shape" aria-hidden="true"></span><span>Archive ${String(n).padStart(2, '0')}</span></summary><p>Nothing archived yet.</p></details>`).join('')}</div>`;
 
-export function pageMarkup(page, logo, escape) {
+export function pageMarkup(page, logo, escape, isMobile = false) {
   if (page.slug === 'dopo') {
     return `<section class="dopo-page" role="button" tabindex="0" aria-label="Dopo. Click to change color and read more." data-dopo-index="0">
       <h1 id="page-title" class="sr-only">Dopo</h1>
@@ -17,11 +17,15 @@ export function pageMarkup(page, logo, escape) {
     return `<section class="detail formal-page" aria-labelledby="page-title">${logo}<h1 id="page-title" class="sr-only" tabindex="-1">Formal</h1><div class="formal-space"></div>${back}</section>`;
   }
   if (page.slug === 'catalog') {
+    if (isMobile) {
+      return `<section class="detail catalog-unavailable" aria-labelledby="page-title">${logo}
+        <div class="catalog-unavailable-copy"><h1 id="page-title" tabindex="-1">404</h1><p>catalog available on desktop only</p></div>${back}</section>`;
+    }
     return `<section class="detail catalog-detail" aria-labelledby="page-title">${logo}
       <h1 id="page-title" class="sr-only" tabindex="-1">Catalog</h1>
       <div class="catalog-content">
         ${archiveFolders([1, 2, 3])}
-        <iframe class="catalog-window" title="Desert / FORMAL catalog" src="${frameUrl}"></iframe>
+        <iframe class="catalog-window" title="Desert / FORMAL catalog" src="${frameUrl}" referrerpolicy="strict-origin-when-cross-origin"></iframe>
         ${archiveFolders([4, 5, 6])}
       </div>${back}</section>`;
   }

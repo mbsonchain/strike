@@ -44,7 +44,7 @@ function render(focus = false) {
   document.body.style.removeProperty('--dopo-color');
   document.title = page ? `${page.title} — Strikeout` : 'Strikeout';
   if (page || slug) {
-    app.innerHTML = (page && pageMarkup(page, logoMarkup, escapeHtml)) || `<section class="detail" aria-labelledby="page-title">
+    app.innerHTML = (page && pageMarkup(page, logoMarkup, escapeHtml, mobile.matches)) || `<section class="detail" aria-labelledby="page-title">
       ${logoMarkup}
       <div class="detail-content"><h1 id="page-title" tabindex="-1">${escapeHtml(page?.title || 'Not found')}</h1>
       <div class="detail-copy"><p>${escapeHtml(page ? page.body || 'Coming soon.' : 'This page could not be found.')}</p></div></div>
@@ -101,6 +101,7 @@ app.addEventListener('click', event => {
 window.addEventListener('popstate', () => { render(true); scrollToContent(); });
 window.addEventListener('hashchange', () => { render(); scrollToContent(); });
 mobile.addEventListener('change', () => {
+  if (location.pathname.replace(/\/$/, '') === '/catalog') render();
   app.querySelector('.catalog-row[data-preview]')?.removeAttribute('data-preview');
   scrollToContent();
 });

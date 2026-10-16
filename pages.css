@@ -29,6 +29,10 @@ body[data-page="formal"] .sky img { visibility: hidden; }
 .folder-shape::before { content: ''; position: absolute; width: 31px; height: 9px; left: -2px; top: -10px; border: 2px solid #080a0d; border-bottom: 0; border-radius: 3px 5px 0 0; background: inherit; }
 .archive-folder[open] .folder-shape { background: #e991c7; }
 .archive-folder p { position: absolute; z-index: 2; top: 100%; left: 50%; transform: translateX(-50%); width: 100%; margin: 8px 0 0; font-size: 11px; }
+.catalog-unavailable { height: 100dvh; }
+.catalog-unavailable-copy { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.catalog-unavailable h1 { font-size: clamp(100px, 30vw, 160px); margin-bottom: 18px; }
+.catalog-unavailable p { margin: 0; font-size: 17px; line-height: 1.4; }
 @media (max-width: 760px) {
   .dopo-page { padding: 2rem 1.5rem; }
   .dopo-content { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); max-width: 100%; padding: 0 1rem; }
@@ -37,14 +41,4 @@ body[data-page="formal"] .sky img { visibility: hidden; }
   .dopo-desktop-copy { display: none; }
   .dopo-mobile-copy { display: block; }
   body[data-page="formal"] .sky { background-image: url('/assets/formal-camo-portrait.jpg'); }
-  .catalog-detail { min-height: 0; gap: 16px; padding-block: 18px; }
-  .catalog-content { grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 10px; }
-  .catalog-window { height: min(62dvh, 520px); }
-  .archive-folders { gap: 38px; }
-  .archive-folder { font-size: 9px; width: 48px; }
-  .folder-shape { width: 42px; height: 30px; }
-  .folder-shape::before { width: 22px; }
-  .archive-folder p { font-size: 9px; }
-  .catalog-detail > .controls { min-height: 28px; }
-  .catalog-detail .back { min-height: 28px; font-size: 28px; }
 }
