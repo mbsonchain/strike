@@ -18,9 +18,9 @@ body[data-page="formal"] .sky img { visibility: hidden; }
 .formal-space { flex: 1; }
 .detail h1.sr-only { margin: 0; }
 .catalog-detail { height: 100svh; height: 100dvh; min-height: 580px; gap: 18px; }
-.catalog-content { display: flex; flex-direction: column; flex: 1; min-height: 0; width: min(100%, 1080px); margin-inline: auto; gap: 22px; }
-.catalog-window { display: block; flex: 1; min-height: 0; width: 100%; border: 0; background: white; }
-.archive-folders { display: flex; align-items: flex-start; justify-content: center; gap: clamp(24px, 6vw, 80px); min-height: 88px; }
+.catalog-content { display: grid; grid-template-columns: 104px minmax(0, 720px) 104px; align-items: center; justify-content: center; flex: 1; min-height: 0; width: min(100%, 1024px); margin-inline: auto; gap: clamp(20px, 3.75vw, 48px); }
+.catalog-window { display: block; height: min(58dvh, 480px); max-height: 100%; min-height: 0; width: 100%; border: 0; background: white; }
+.archive-folders { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(24px, 5dvh, 44px); }
 .archive-folder { position: relative; width: 104px; text-align: center; font-size: 12px; font-weight: 900; }
 .archive-folder summary { cursor: pointer; list-style: none; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .archive-folder summary::-webkit-details-marker { display: none; }
@@ -28,7 +28,7 @@ body[data-page="formal"] .sky img { visibility: hidden; }
 .folder-shape { display: block; position: relative; width: 76px; height: 48px; margin-top: 10px; border: 2px solid #080a0d; border-radius: 2px; background: #a9c3db; }
 .folder-shape::before { content: ''; position: absolute; width: 31px; height: 9px; left: -2px; top: -10px; border: 2px solid #080a0d; border-bottom: 0; border-radius: 3px 5px 0 0; background: inherit; }
 .archive-folder[open] .folder-shape { background: #e991c7; }
-.archive-folder p { position: absolute; z-index: 2; top: 100%; left: 50%; transform: translateX(-50%); width: 140px; margin: 8px 0 0; font-size: 11px; }
+.archive-folder p { position: absolute; z-index: 2; top: 100%; left: 50%; transform: translateX(-50%); width: 100%; margin: 8px 0 0; font-size: 11px; }
 @media (max-width: 760px) {
   .dopo-page { padding: 2rem 1.5rem; }
   .dopo-content { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); max-width: 100%; padding: 0 1rem; }
@@ -38,10 +38,13 @@ body[data-page="formal"] .sky img { visibility: hidden; }
   .dopo-mobile-copy { display: block; }
   body[data-page="formal"] .sky { background-image: url('/assets/formal-camo-portrait.jpg'); }
   .catalog-detail { min-height: 0; gap: 16px; padding-block: 18px; }
-  .catalog-content { gap: 20px; }
-  .archive-folders { gap: 12px; min-height: 72px; }
-  .archive-folder { font-size: 10px; width: 82px; }
-  .folder-shape { width: 60px; height: 38px; }
+  .catalog-content { grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 10px; }
+  .catalog-window { height: min(62dvh, 520px); }
+  .archive-folders { gap: 38px; }
+  .archive-folder { font-size: 9px; width: 48px; }
+  .folder-shape { width: 42px; height: 30px; }
+  .folder-shape::before { width: 22px; }
+  .archive-folder p { font-size: 9px; }
   .catalog-detail > .controls { min-height: 28px; }
   .catalog-detail .back { min-height: 28px; font-size: 28px; }
 }

@@ -2,6 +2,7 @@ import { dopo } from './content.js';
 
 const back = '<nav class="controls" aria-label="Page navigation"><a class="back" href="/#catalog" aria-label="Back to catalog">←</a></nav>';
 const frameUrl = new URL('./catalog-frame.html', import.meta.url).pathname;
+const archiveFolders = numbers => `<div class="archive-folders" aria-label="Catalog archives ${numbers[0]}–${numbers.at(-1)}">${numbers.map(n => `<details class="archive-folder"><summary><span class="folder-shape" aria-hidden="true"></span><span>Archive ${String(n).padStart(2, '0')}</span></summary><p>Nothing archived yet.</p></details>`).join('')}</div>`;
 
 export function pageMarkup(page, logo, escape) {
   if (page.slug === 'dopo') {
@@ -19,8 +20,9 @@ export function pageMarkup(page, logo, escape) {
     return `<section class="detail catalog-detail" aria-labelledby="page-title">${logo}
       <h1 id="page-title" class="sr-only" tabindex="-1">Catalog</h1>
       <div class="catalog-content">
+        ${archiveFolders([1, 2, 3])}
         <iframe class="catalog-window" title="Desert / FORMAL catalog" src="${frameUrl}"></iframe>
-        <div class="archive-folders" aria-label="Catalog archives">${[1, 2, 3].map(n => `<details class="archive-folder"><summary><span class="folder-shape" aria-hidden="true"></span><span>Archive ${String(n).padStart(2, '0')}</span></summary><p>Nothing archived yet.</p></details>`).join('')}</div>
+        ${archiveFolders([4, 5, 6])}
       </div>${back}</section>`;
   }
   return null;

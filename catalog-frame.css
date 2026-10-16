@@ -26,7 +26,7 @@ a:focus-visible, button:focus-visible { outline: 1px solid currentColor; outline
 .desert-card-link:hover{color:var(--ink)}
 .desert-card-link:focus-visible .desert-frame{border-color:var(--pink)}
 @media(hover:hover){.desert-card-link:hover .desert-frame{border-color:var(--pink)}}
-@media(max-width:760px){
+@media(max-width:600px){
   .desert-feed{display:block;max-width:none;padding:0;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory;scrollbar-width:none;scroll-behavior:smooth}
   .desert-feed::-webkit-scrollbar{display:none}
   .desert-entry{height:100%;min-height:100%;padding:20px 24px 52px;scroll-snap-align:start;scroll-snap-stop:always}
@@ -39,10 +39,10 @@ a:focus-visible, button:focus-visible { outline: 1px solid currentColor; outline
   .desert-steps button{width:44px;height:44px;font:11px var(--mono);color:var(--quiet)}
   .desert-steps button:disabled{opacity:.25;cursor:default}
 }
-@media(max-width:760px) and (max-height:540px){.desert-content{width:min(100%,480px,80cqh)}.desert-entry{padding:8px 24px 48px}.desert-content h2{margin:10px 0 4px}.desert-content p{line-height:1.4}}
+@media(max-width:600px) and (max-height:540px){.desert-content{width:min(100%,480px,80cqh)}.desert-entry{padding:8px 24px 48px}.desert-content h2{margin:10px 0 4px}.desert-content p{line-height:1.4}}
 @media(prefers-reduced-motion:reduce){.desert-feed{scroll-behavior:auto}}
 /* The inset can be shorter than the original page; keep cards readable and scroll inside it. */
-@media (min-width: 761px) {
+@media (min-width: 601px) {
   .desert-feed { grid-template-rows: repeat(2, minmax(220px, 1fr)); overflow-y: auto; overscroll-behavior: contain; }
   .desert-content { width: min(100%, 240px); }
 }
@@ -55,6 +55,6 @@ a:focus-visible, button:focus-visible { outline: 1px solid currentColor; outline
 .frame-switch[aria-checked="true"] span { transform: translateX(20px); }
 body[data-view="desert"] { background: #cbb98f url('/assets/formal-camo-landscape.jpg') center/cover no-repeat; }
 body[data-view="desert"] .network-page { visibility: hidden; }
-@media (max-width: 760px) {
+@media (max-width: 600px) {
   body[data-view="desert"] { background-image: url('/assets/formal-camo-portrait.jpg'); }
 }
