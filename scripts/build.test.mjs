@@ -12,7 +12,7 @@ const sourceRoot = new URL('../', import.meta.url);
 test('every page loads one complete release, and a playback-only update changes all asset addresses', async t => {
   const root = await mkdtemp(join(tmpdir(), 'strikeout-build-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  for (const file of ['package.json', 'scripts', 'assets', 'index.html', 'mobile-preview.html', 'app.js', 'media.js', 'content.js', 'styles.css', 'mobile.css']) {
+  for (const file of ['package.json', 'scripts', 'assets', 'index.html', 'mobile-preview.html', 'app.js', 'media.js', 'content.js', 'pages.js', 'styles.css', 'mobile.css', 'pages.css', 'catalog-frame.html', 'catalog-frame.css', 'catalog-frame.js']) {
     await cp(new URL(file, sourceRoot), join(root, file), { recursive: true });
   }
   async function build() {
@@ -20,18 +20,19 @@ test('every page loads one complete release, and a playback-only update changes 
     const { release } = JSON.parse(await readFile(join(root, 'dist/release.json'), 'utf8'));
     for (const page of (await readdir(join(root, 'dist'))).filter(file => file.endsWith('.html'))) {
       const html = await readFile(join(root, 'dist', page), 'utf8');
+      if (page === 'catalog-frame.html') continue;
       assert.ok(html.includes(`<meta name="strikeout-release" content="${release}">`), page);
       if (page === 'mobile-preview.html') {
         assert.ok(html.includes("frame.src = '/#video'"));
         assert.ok(!html.includes('data-mobile-preview'));
         continue;
       }
-      for (const asset of ['app.js', 'styles.css', 'mobile.css']) {
+      for (const asset of ['app.js', 'styles.css', 'mobile.css', 'pages.css']) {
         assert.ok(html.includes(`/releases/${release}/${asset}`), `${page}: ${asset}`);
         assert.ok(!html.includes(`"/${asset}"`), `${page}: unversioned ${asset}`);
       }
     }
-    for (const file of ['app.js', 'media.js', 'content.js', 'styles.css', 'mobile.css']) {
+    for (const file of ['app.js', 'media.js', 'content.js', 'pages.js', 'styles.css', 'mobile.css', 'pages.css', 'catalog-frame.html', 'catalog-frame.css', 'catalog-frame.js']) {
       assert.equal(await readFile(join(root, 'dist/releases', release, file), 'utf8'), await readFile(join(root, file), 'utf8'));
     }
     const app = await readFile(join(root, 'dist/releases', release, 'app.js'), 'utf8');
@@ -44,5 +45,9 @@ test('every page loads one complete release, and a playback-only update changes 
   assert.equal(await build(), first, 'unchanged builds keep the same addresses');
   const mediaPath = join(root, 'media.js');
   await writeFile(mediaPath, `${await readFile(mediaPath, 'utf8')}\n// Changed playback release.\n`);
-  assert.notEqual(await build(), first, 'an imported module change must invalidate the entry module too');
+  const second = await build();
+  assert.notEqual(second, first, 'an imported module change must invalidate the entry module too');
+  const framePath = join(root, 'catalog-frame.html');
+  await writeFile(framePath, `${await readFile(framePath, 'utf8')}\n<!-- Updated catalog content. -->\n`);
+  assert.notEqual(await build(), second, 'the embedded catalog must be released with the surrounding site');
 });

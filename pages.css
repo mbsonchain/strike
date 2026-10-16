@@ -1,0 +1,47 @@
+/* Initiative pages have their own identities; the catalog remains on the sky. */
+body[data-page="dopo"] { background: var(--dopo-color, #fbae9d); transition: background-color .4s ease; }
+body[data-page="dopo"] .sky { visibility: hidden; }
+.dopo-page { position: relative; display: flex; justify-content: center; align-items: center; min-height: 100svh; min-height: 100dvh; padding: 3rem 2rem; cursor: pointer; user-select: none; color: white; outline: none; }
+.dopo-content { width: 100%; max-width: 700px; text-align: center; }
+.dopo-logo { display: block; width: 200px; height: auto; margin: 0 auto 2rem; }
+.dopo-copy { font-family: articulat-cf, sans-serif; font-size: 1rem; font-weight: 900; line-height: 1.6; }
+.dopo-copy p { margin: 0 0 1rem; }
+.dopo-mobile-copy { display: none; }
+.dopo-dark-text { color: #3e4f63; }
+.dopo-dark-text .dopo-logo { filter: invert(1); }
+.dopo-navigation { position: absolute; bottom: 24px; left: 24px; color: white; }
+body:has(.dopo-dark-text) .dopo-navigation { color: #3e4f63; }
+.dopo-page:focus-visible .dopo-logo { outline: 1px solid currentColor; outline-offset: 12px; }
+body[data-page="formal"] .sky { background: #cbb98f url('/assets/formal-camo-landscape.jpg') center/cover no-repeat; }
+body[data-page="formal"] .sky img { visibility: hidden; }
+.formal-page { animation: none; }
+.formal-space { flex: 1; }
+.detail h1.sr-only { margin: 0; }
+.catalog-detail { height: 100svh; height: 100dvh; min-height: 580px; gap: 18px; }
+.catalog-content { display: flex; flex-direction: column; flex: 1; min-height: 0; width: min(100%, 1080px); margin-inline: auto; gap: 22px; }
+.catalog-window { display: block; flex: 1; min-height: 0; width: 100%; border: 0; background: white; }
+.archive-folders { display: flex; align-items: flex-start; justify-content: center; gap: clamp(24px, 6vw, 80px); min-height: 88px; }
+.archive-folder { position: relative; width: 104px; text-align: center; font-size: 12px; font-weight: 900; }
+.archive-folder summary { cursor: pointer; list-style: none; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.archive-folder summary::-webkit-details-marker { display: none; }
+.archive-folder summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.folder-shape { display: block; position: relative; width: 76px; height: 48px; margin-top: 10px; border: 2px solid #080a0d; border-radius: 2px; background: #a9c3db; }
+.folder-shape::before { content: ''; position: absolute; width: 31px; height: 9px; left: -2px; top: -10px; border: 2px solid #080a0d; border-bottom: 0; border-radius: 3px 5px 0 0; background: inherit; }
+.archive-folder[open] .folder-shape { background: #e991c7; }
+.archive-folder p { position: absolute; z-index: 2; top: 100%; left: 50%; transform: translateX(-50%); width: 140px; margin: 8px 0 0; font-size: 11px; }
+@media (max-width: 760px) {
+  .dopo-page { padding: 2rem 1.5rem; }
+  .dopo-content { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); max-width: 100%; padding: 0 1rem; }
+  .dopo-logo { width: 150px; margin-bottom: 1.5rem; }
+  .dopo-copy { font-size: .9rem; }
+  .dopo-desktop-copy { display: none; }
+  .dopo-mobile-copy { display: block; }
+  body[data-page="formal"] .sky { background-image: url('/assets/formal-camo-portrait.jpg'); }
+  .catalog-detail { min-height: 0; gap: 16px; padding-block: 18px; }
+  .catalog-content { gap: 20px; }
+  .archive-folders { gap: 12px; min-height: 72px; }
+  .archive-folder { font-size: 10px; width: 82px; }
+  .folder-shape { width: 60px; height: 38px; }
+  .catalog-detail > .controls { min-height: 28px; }
+  .catalog-detail .back { min-height: 28px; font-size: 28px; }
+}
