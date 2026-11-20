@@ -115,5 +115,12 @@ window.addEventListener('keydown', event => {
   }
   handleSoundShortcut(event, filmPlayer, !mobile.matches);
 });
+
+// An Instagram profile link to the homepage opens the mobile film and menu directly.
+if (mobile.matches && location.pathname === '/' && !location.hash && /\bInstagram\b/i.test(navigator.userAgent)) {
+  const landing = new URL(location.href);
+  landing.hash = 'video';
+  history.replaceState(history.state, '', landing);
+}
 render();
 scrollToContent();

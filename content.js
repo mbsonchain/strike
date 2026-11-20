@@ -6,11 +6,11 @@ export const film = {
 };
 
 export const pages = [
+  { slug: 'strikeout', title: 'Strikeout', body: '' },
   { slug: 'studios', title: 'Studios', body: '' },
   { slug: 'dopo', title: 'Dopo', body: '' },
   { slug: 'formal', title: 'Formal', body: '' },
   { slug: 'catalog', title: 'Catalog', body: '' },
-  { slug: 'about', title: 'About', body: '' },
 ];
 
 // Original Strikeout Dopo copy, preserved as a placeholder.
