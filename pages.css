@@ -12,14 +12,16 @@ body[data-page="dopo"] .sky { visibility: hidden; }
 .dopo-navigation { position: absolute; bottom: 24px; left: 24px; color: white; }
 body:has(.dopo-dark-text) .dopo-navigation { color: #3e4f63; }
 .dopo-page:focus-visible .dopo-logo { outline: 1px solid currentColor; outline-offset: 12px; }
-body[data-page="about"] .sky { background: #cbb98f url('/assets/formal-camo-landscape.jpg') center/cover no-repeat; }
-body[data-page="formal"] .sky { background: #fff; }
+body[data-page="formal"] .sky { background: #cbb98f url('/assets/formal-camo-landscape.jpg') center/cover no-repeat; }
+body[data-page="about"] .sky { background: #fff; }
 body:is([data-page="about"], [data-page="formal"]) .sky img { visibility: hidden; }
 .formal-page { animation: none; }
-.formal-space {
-  flex: 1;
+.formal-space { flex: 1; }
+body[data-page="about"] .detail-content::after {
+  content: '';
   width: min(80%, 740px);
-  margin-inline: auto;
+  height: clamp(54px, 9vw, 112px);
+  margin-top: clamp(24px, 5svh, 48px);
   background-image: var(--formal-flowers);
   background-position: left center, center, right center;
   background-size: clamp(48px, 8vw, 104px) auto;
@@ -49,5 +51,5 @@ body:is([data-page="about"], [data-page="formal"]) .sky img { visibility: hidden
   .dopo-copy { font-size: .9rem; }
   .dopo-desktop-copy { display: none; }
   .dopo-mobile-copy { display: block; }
-  body[data-page="about"] .sky { background-image: url('/assets/formal-camo-portrait.jpg'); }
+  body[data-page="formal"] .sky { background-image: url('/assets/formal-camo-portrait.jpg'); }
 }

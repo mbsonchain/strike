@@ -9,7 +9,7 @@ export const menuPages = [
   { slug: 'studios', title: 'Studios', body: '' },
   { slug: 'dopo', title: 'Dopo', body: '' },
   { slug: 'formal', title: 'Formal', body: '' },
-  { slug: 'ssc', title: 'SSC', body: 'Student Service Corp' },
+  { slug: 'ssc', title: 'Service Corp', body: 'Student Service Corp' },
   { slug: 'about', title: 'About', body: '' },
 ];
 

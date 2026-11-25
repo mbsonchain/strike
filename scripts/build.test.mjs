@@ -41,7 +41,7 @@ test('every page loads one complete release, and a playback-only update changes 
     return release;
   }
   const first = await build();
-  for (const [slug, title] of [['ssc', 'SSC'], ['catalog', 'Catalog']]) {
+  for (const [slug, title] of [['ssc', 'Service Corp'], ['catalog', 'Catalog']]) {
     const html = await readFile(join(root, 'dist', `${slug}.html`), 'utf8');
     assert.ok(html.includes(`<title>${title} — Strikeout</title>`));
   }
