@@ -1,4 +1,4 @@
-import { film, pages } from './content.js';
+import { film, menuPages, pages } from './content.js';
 import { mountFilm, handleSoundShortcut } from './media.js';
 import { pageMarkup, cycleDopo } from './pages.js';
 
@@ -63,7 +63,7 @@ function render(focus = false) {
     ${logoMarkup}
     <div class="stage">
       <section class="film-panel" aria-label="Strikeout film" tabindex="-1"><div class="film-frame"></div></section>
-      <nav class="catalog-panel" aria-label="Strikeout catalog"><div class="catalog-list">${pages.map(item => `<a class="catalog-row" data-section="${item.slug}" href="/${item.slug}">${escapeHtml(item.title)}</a>`).join('')}</div></nav>
+      <nav class="catalog-panel" aria-label="Strikeout catalog"><div class="catalog-list">${menuPages.map(item => `<a class="catalog-row" data-section="${item.slug}" href="/${item.slug}">${escapeHtml(item.title)}</a>`).join('')}</div></nav>
     </div>
     <nav class="controls" aria-label="View navigation">
       <button class="view-switch" role="switch" aria-label="Catalog view" aria-checked="${view === 'catalog'}"><span></span></button>

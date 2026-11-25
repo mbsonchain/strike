@@ -41,6 +41,10 @@ test('every page loads one complete release, and a playback-only update changes 
     return release;
   }
   const first = await build();
+  for (const [slug, title] of [['ssc', 'SSC'], ['catalog', 'Catalog']]) {
+    const html = await readFile(join(root, 'dist', `${slug}.html`), 'utf8');
+    assert.ok(html.includes(`<title>${title} — Strikeout</title>`));
+  }
   assert.equal(await build(), first, 'unchanged builds keep the same addresses');
   const mediaPath = join(root, 'media.js');
   await writeFile(mediaPath, `${await readFile(mediaPath, 'utf8')}\n// Changed playback release.\n`);

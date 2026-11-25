@@ -5,13 +5,15 @@ export const film = {
   poster: '/assets/ghost-town-poster.jpg',
 };
 
-export const pages = [
+export const menuPages = [
   { slug: 'studios', title: 'Studios', body: '' },
   { slug: 'dopo', title: 'Dopo', body: '' },
   { slug: 'formal', title: 'Formal', body: '' },
-  { slug: 'catalog', title: 'Catalog', body: '' },
+  { slug: 'ssc', title: 'SSC', body: 'Student Service Corp' },
   { slug: 'about', title: 'About', body: '' },
 ];
+
+export const pages = [...menuPages, { slug: 'catalog', title: 'Catalog', body: '' }];
 
 // Original Strikeout Dopo copy, preserved as a placeholder.
 export const dopo = {
