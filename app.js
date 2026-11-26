@@ -6,6 +6,7 @@ const app = document.querySelector('#app');
 const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+const markAttribute = page => page?.mark ? ` data-mark="${escapeHtml(page.mark)}"` : '';
 const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout entrance"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
 
 function scrollToContent() {
@@ -44,7 +45,7 @@ function render(focus = false) {
   document.body.style.removeProperty('--dopo-color');
   document.title = page ? `${page.title} — Strikeout` : 'Strikeout';
   if (page || slug) {
-    app.innerHTML = (page && pageMarkup(page, logoMarkup, escapeHtml, mobile.matches)) || `<section class="detail" aria-labelledby="page-title">
+    app.innerHTML = (page && pageMarkup(page, logoMarkup, escapeHtml, mobile.matches)) || `<section class="detail"${markAttribute(page)} aria-labelledby="page-title">
       ${logoMarkup}
       <div class="detail-content"><h1 id="page-title" tabindex="-1">${escapeHtml(page?.title || 'Not found')}</h1>
       <div class="detail-copy"><p>${escapeHtml(page ? page.body || 'Coming soon.' : 'This page could not be found.')}</p></div></div>
@@ -63,7 +64,7 @@ function render(focus = false) {
     ${logoMarkup}
     <div class="stage">
       <section class="film-panel" aria-label="Strikeout film" tabindex="-1"><div class="film-frame"></div></section>
-      <nav class="catalog-panel" aria-label="Strikeout catalog"><div class="catalog-list">${menuPages.map(item => `<a class="catalog-row" data-section="${item.slug}" href="/${item.slug}">${escapeHtml(item.title)}</a>`).join('')}</div></nav>
+      <nav class="catalog-panel" aria-label="Strikeout catalog"><div class="catalog-list">${menuPages.map(item => `<a class="catalog-row" data-section="${item.slug}"${markAttribute(item)} href="/${item.slug}">${escapeHtml(item.title)}</a>`).join('')}</div></nav>
     </div>
     <nav class="controls" aria-label="View navigation">
       <button class="view-switch" role="switch" aria-label="Catalog view" aria-checked="${view === 'catalog'}"><span></span></button>

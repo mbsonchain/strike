@@ -13,16 +13,16 @@ body[data-page="dopo"] .sky { visibility: hidden; }
 body:has(.dopo-dark-text) .dopo-navigation { color: #3e4f63; }
 .dopo-page:focus-visible .dopo-logo { outline: 1px solid currentColor; outline-offset: 12px; }
 body[data-page="formal"] .sky { background: #cbb98f url('/assets/formal-camo-landscape.jpg') center/cover no-repeat; }
-body[data-page="about"] .sky { background: #fff; }
-body:is([data-page="about"], [data-page="formal"]) .sky img { visibility: hidden; }
+body:has(.detail[data-mark]) .sky { background: #fff; }
+body:has(.detail[data-mark]) .sky img, body[data-page="formal"] .sky img { visibility: hidden; }
 .formal-page { animation: none; }
 .formal-space { flex: 1; }
-body[data-page="about"] .detail-content::after {
+.detail[data-mark] .detail-content::after {
   content: '';
   width: min(80%, 740px);
   height: clamp(54px, 9vw, 112px);
   margin-top: clamp(24px, 5svh, 48px);
-  background-image: var(--formal-flowers);
+  background-image: var(--three-marks);
   background-position: left center, center, right center;
   background-size: clamp(48px, 8vw, 104px) auto;
   background-repeat: no-repeat;
