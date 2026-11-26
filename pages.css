@@ -22,12 +22,12 @@ body:has(.detail[data-mark]) .sky img, body[data-page="formal"] .sky img { visib
 .formal-space { flex: 1; }
 .detail[data-mark] .detail-content::after {
   content: '';
-  width: calc(min(80%, 740px) * var(--mark-scale, 1));
+  width: min(80%, 740px);
   height: clamp(54px, 9vw, 112px);
   margin-top: clamp(24px, 5svh, 48px);
   background-image: var(--three-marks);
   background-position: left center, center, right center;
-  background-size: calc(clamp(48px, 8vw, 104px) * var(--mark-scale, 1)) auto;
+  background-size: clamp(48px, 8vw, 104px) auto;
   background-repeat: no-repeat;
 }
 .detail h1.sr-only { margin: 0; }
