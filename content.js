@@ -7,9 +7,9 @@ export const film = {
 
 export const menuPages = [
   { slug: 'studios', title: 'Studios', body: '' },
+  { slug: 'ssc', title: 'Service', body: 'Student Service Corp', mark: 'service' },
   { slug: 'dopo', title: 'Dopo', body: '' },
   { slug: 'formal', title: 'Formal', body: '' },
-  { slug: 'ssc', title: 'Service', body: 'Student Service Corp', mark: 'service' },
   { slug: 'about', title: 'About', body: '', mark: 'flower' },
 ];
 
