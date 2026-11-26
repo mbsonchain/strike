@@ -4,7 +4,7 @@ A static site using the original Strikeout sky photograph, S artwork and Articul
 
 ## Experience
 
-- The homepage opens with the stationary S. Clicking it opens the film, which automatically starts muted. Direct `/#video` visits also autoplay. The small S returns to the entrance.
+- The homepage opens with the stationary S. Clicking it opens the film, which automatically starts muted. Direct `/#video` visits also autoplay. Every interior page has a centered S header linking directly to the entrance. The mark is solid black and reverses to white on Service.
 - The native 1080p MP4 plays inline and loops. If the browser blocks autoplay, tapping the film starts playback. Otherwise, tapping the film toggles sound. Clicking the surrounding page and pressing desktop Space toggle sound independently of playback. Links and other controls retain their normal actions.
 - Desktop has a wordless film/catalog switch. Switching views or changing between the film/catalog hashes preserves the video, its playback position and its sound setting. Playback continues in the catalog view. Opening a separate subpage or returning to the entrance releases the player.
 - Mobile shows the logo, horizontal film and five catalog links together, with no view switch. Content is centered and stationary. The sky extends half a large viewport above and below the content, with a blue fallback; scrolling is locked while pinch zoom remains available. Compact screens use smaller spacing and film sizing.

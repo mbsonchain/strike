@@ -27,11 +27,11 @@ body[data-page="formal"] .note-scenery::after {
 .note-page {
   position: relative;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto 44px;
+  grid-template-rows: auto minmax(0, 1fr) auto 44px;
   justify-items: center;
   height: 100vh;
   height: 100dvh;
-  padding: max(18px, env(safe-area-inset-top)) max(5vw, env(safe-area-inset-right))
+  padding: var(--masthead-top) max(5vw, env(safe-area-inset-right))
            max(6px, env(safe-area-inset-bottom)) max(5vw, env(safe-area-inset-left));
 }
 .note-page h1:focus { outline: none; }
@@ -63,18 +63,21 @@ body[data-page="formal"] .note-scenery::after {
   min-height: 44px;
   position: relative;
 }
-.note-page a:focus-visible { text-decoration: none; outline: 2px solid currentColor; outline-offset: 3px; border-radius: 3px; }
+.note-page :is(.note-site, .back):focus-visible { text-decoration: none; outline: 2px solid currentColor; outline-offset: 3px; border-radius: 3px; }
 .note-page .back { font: 26px/1 Arial, sans-serif; }
 body:is([data-page="studios"], [data-page="dopo"]) :is(.note-composition img, .note-signature, .note-page .back) {
   filter: drop-shadow(0 .7px .8px rgb(48 32 36 / 68%));
 }
 body[data-page="dopo"] { --opening-width: 96%; --continuation-width: 87%; }
 body[data-page="formal"] { --opening-width: 86%; }
+body[data-page="ssc"] .site-logo { color: #fff; }
+body[data-page="ssc"] .site-logo img { filter: invert(1); }
 body[data-page="about"] { color: #000; --opening-width: 83%; --continuation-width: 89%; }
+body[data-page="about"] .note-ending { margin-block-end: clamp(10px, 2.5dvh, 24px); }
 body[data-page="about"] .note-signature { height: min(21dvh, 190px); max-width: 66vw; }
 .note-flowers { position: absolute; inset: clamp(4px, 1dvh, 12px) clamp(7px, 2.4vw, 32px); pointer-events: none; overflow: clip; }
 .note-flowers span { position: absolute; aspect-ratio: 583 / 618; background: url('/assets/formal-flower.png') center / contain no-repeat; }
-.note-flowers span:nth-child(1) { width: clamp(54px, 8vw, 111px); top: 6%; right: 8%; transform: rotate(17deg); }
+.note-flowers span:nth-child(1) { width: clamp(54px, 8vw, 111px); top: 7%; right: 10%; transform: rotate(8deg); }
 .note-flowers span:nth-child(2) { width: clamp(66px, 10vw, 139px); top: 61%; left: 5%; transform: rotate(-21deg); }
 .note-flowers span:nth-child(3) { width: clamp(40px, 5.3vw, 72px); bottom: 7%; right: 17%; transform: rotate(-9deg); }
 
@@ -93,7 +96,7 @@ body[data-page="about"] .note-signature { height: min(21dvh, 190px); max-width: 
 }
 @media (max-width: 760px) and (orientation: portrait) {
   .note-page {
-    padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    padding: var(--masthead-top) max(16px, env(safe-area-inset-right))
              max(3px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   }
   .note-composition {
@@ -102,12 +105,15 @@ body[data-page="about"] .note-signature { height: min(21dvh, 190px); max-width: 
   }
   .note-composition .note-opening { width: var(--opening-width, 93%); }
   .note-composition .note-continuation { width: var(--continuation-width, 96%); }
-  .note-flowers span:nth-child(1) { width: clamp(40px, 12vw, 68px); top: 4.5%; right: 4%; }
+  .note-flowers span:nth-child(1) { width: clamp(40px, 12vw, 68px); top: 5.5%; right: 7.5%; }
   .note-flowers span:nth-child(2) { width: clamp(37px, 10vw, 58px); top: auto; bottom: 17%; left: 2.5%; }
   .note-flowers span:nth-child(3) { width: clamp(29px, 8vw, 46px); bottom: 8%; right: 4.5%; }
 }
 @media (max-height: 550px) and (orientation: landscape) {
-  .note-page { padding-block: max(4px, env(safe-area-inset-top)) max(2px, env(safe-area-inset-bottom)); }
+  :root { --masthead-top: max(6px, env(safe-area-inset-top)); }
+  .site-logo { min-width: 44px; min-height: 44px; }
+  .site-logo img { width: 38px; }
+  .note-page { padding-block: var(--masthead-top) max(2px, env(safe-area-inset-bottom)); }
   .note-composition { padding-block: 2px; }
   .note-signature { height: 27px; }
   .note-flowers span:nth-child(2) { width: 38px; top: auto; bottom: 13%; left: 8%; }
