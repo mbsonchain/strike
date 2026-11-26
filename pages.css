@@ -72,7 +72,7 @@ body[data-page="dopo"] { --opening-width: 96%; --continuation-width: 87%; }
 body[data-page="formal"] { --opening-width: 86%; }
 body[data-page="about"] { color: #000; --opening-width: 83%; --continuation-width: 89%; }
 body[data-page="about"] .note-signature { height: min(21dvh, 190px); max-width: 66vw; }
-.note-flowers { position: absolute; inset: 0; pointer-events: none; overflow: clip; }
+.note-flowers { position: absolute; inset: clamp(4px, 1dvh, 12px) clamp(7px, 2.4vw, 32px); pointer-events: none; overflow: clip; }
 .note-flowers span { position: absolute; aspect-ratio: 583 / 618; background: url('/assets/formal-flower.png') center / contain no-repeat; }
 .note-flowers span:nth-child(1) { width: clamp(54px, 8vw, 111px); top: 6%; right: 8%; transform: rotate(17deg); }
 .note-flowers span:nth-child(2) { width: clamp(66px, 10vw, 139px); top: 61%; left: 5%; transform: rotate(-21deg); }
