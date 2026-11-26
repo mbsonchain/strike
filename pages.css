@@ -1,45 +1,133 @@
-/* The five handwritten sheets sit directly on their section backgrounds. */
-body[data-page="studios"] { --note-image: url('/assets/strikeout-sky.jpg'); }
-body[data-page="formal"] { --note-image: url('/assets/formal-camo-landscape.jpg'); }
-:root:has(body[data-note]) { background-color: var(--note-color); overflow: hidden; overscroll-behavior: none; }
-body[data-note] { height: auto; padding: 0; background-color: var(--note-color); color: #fff; }
+/* The photograph belongs to the document so the phone's translucent bars have imagery to sample. */
+:root:has(body[data-note]) { background-color: var(--note-color); overscroll-behavior: none; }
+body[data-note] {
+  position: relative;
+  height: auto;
+  min-height: 100%;
+  padding: 0;
+  overflow: visible;
+  background-color: var(--note-color);
+  color: #fff;
+}
 body[data-note] .sky { display: none; }
-/* Extend the background behind the browser bars without enlarging the sheet. */
-body[data-note]::before {
-  content: '';
-  position: fixed;
-  inset: -32px;
-  inset-block: calc(-1 * max(32px, 12lvh, env(safe-area-inset-top), env(safe-area-inset-bottom)));
-  inset-inline: calc(-1 * max(24px, 5lvw, env(safe-area-inset-left), env(safe-area-inset-right)));
-  z-index: 0;
+.note-scenery {
+  position: absolute;
+  inset: calc(0px - var(--note-bleed, 0px)) 0;
+  display: block;
+  overflow: clip;
   pointer-events: none;
-  background: var(--note-color) var(--note-image, none) center / cover no-repeat;
+}
+.note-scenery img { display: block; width: 100%; height: 100%; object-fit: cover; }
+body[data-page="formal"] .note-scenery::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgb(48 31 18 / 22%), rgb(48 31 18 / 8%));
 }
 .note-page {
+  position: relative;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 44px;
-  place-items: center;
+  grid-template-rows: minmax(0, 1fr) auto 44px;
+  justify-items: center;
   height: 100vh;
   height: 100dvh;
-  padding: max(18px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
-           max(6px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  padding: max(18px, env(safe-area-inset-top)) max(5vw, env(safe-area-inset-right))
+           max(6px, env(safe-area-inset-bottom)) max(5vw, env(safe-area-inset-left));
 }
-body[data-page="about"] .note-page { grid-template-rows: minmax(0, 1fr) min(50vw, 23%, 215px) 44px; }
-.note-art {
+.note-page h1:focus { outline: none; }
+.note-composition {
+  position: relative;
+  width: min(100%, 1120px);
+  min-height: 0;
+  display: grid;
+  grid-template: minmax(0, .16fr) minmax(0, .68fr) minmax(0, .16fr) / repeat(2, minmax(0, 1fr));
+  column-gap: clamp(18px, 4vw, 72px);
+  padding-block: clamp(8px, 2.4dvh, 26px);
+}
+.note-composition img {
   display: block;
-  width: min(100%, 724px);
+  width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
   object-fit: contain;
-  filter: drop-shadow(0 .7px .8px rgb(48 32 36 / .78));
 }
-.note-acronym { object-position: center bottom; }
-.note-page .back { font: 26px/1 Arial, sans-serif; text-shadow: 0 1px 2px rgb(48 32 36 / .65); }
-.note-page h1:focus { outline: none; }
-body:is([data-page="ssc"], [data-page="formal"]) .note-art { filter: none; }
-@media (max-width: 760px) {
-  body[data-page="formal"] { --note-image: url('/assets/formal-camo-portrait.jpg'); }
+.note-opening { grid-area: 1 / 1 / 3 / 2; object-position: left 32%; }
+.note-continuation { grid-area: 2 / 2 / 4 / 3; object-position: right 74%; }
+.note-ending { position: relative; display: grid; place-items: center; max-width: 100%; }
+.note-signature { display: block; width: auto; height: clamp(31px, 5.1dvh, 49px); max-width: 72vw; object-fit: contain; }
+.note-site {
+  display: grid;
+  place-items: center;
+  padding: 5px 9px 6px;
+  min-height: 44px;
+  position: relative;
+}
+.note-site::after {
+  content: '';
+  position: absolute;
+  inset: auto 9px 4px;
+  border-bottom: 1px solid currentColor;
+  opacity: .72;
+}
+.note-site:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 3px; }
+@media (hover: hover) { .note-site:hover::after { border-bottom-width: 2px; opacity: 1; } }
+.note-page .back { font: 26px/1 Arial, sans-serif; }
+body:is([data-page="studios"], [data-page="dopo"]) :is(.note-composition img, .note-signature, .note-page .back) {
+  filter: drop-shadow(0 .7px .8px rgb(48 32 36 / 68%));
+}
+body[data-page="ssc"] { --opening-height: 1.26fr; }
+body[data-page="dopo"] { --opening-width: 96%; --continuation-width: 87%; }
+body[data-page="formal"] { --opening-height: 1.72fr; --opening-width: 86%; }
+body[data-page="about"] { color: #000; --opening-width: 83%; --continuation-width: 89%; }
+body[data-page="about"] .note-signature { height: min(21dvh, 190px); max-width: 66vw; }
+.note-flowers { position: absolute; inset: 0; pointer-events: none; overflow: clip; }
+.note-flowers span { position: absolute; aspect-ratio: 583 / 618; background: url('/assets/formal-flower.png') center / contain no-repeat; }
+.note-flowers span:nth-child(1) { width: clamp(54px, 8vw, 111px); top: 6%; right: 8%; transform: rotate(17deg); }
+.note-flowers span:nth-child(2) { width: clamp(66px, 10vw, 139px); top: 61%; left: 5%; transform: rotate(-21deg); }
+.note-flowers span:nth-child(3) { width: clamp(40px, 5.3vw, 72px); bottom: 7%; right: 17%; transform: rotate(-9deg); }
+
+@media (max-width: 760px), (pointer: coarse) and (max-height: 550px) {
+  /* The root can scroll to a real middle position. The content and controls stay on one sheet. */
+  :root[data-note-bleed] {
+    --note-bleed: max(130px, 25lvh, env(safe-area-inset-top), env(safe-area-inset-bottom));
+    overflow-x: clip;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+  }
+  :root[data-note-bleed]::-webkit-scrollbar { display: none; }
+  :root[data-note-bleed] body[data-note] { padding-block: var(--note-bleed); touch-action: pinch-zoom; }
+  :root[data-note-bleed] #app { scroll-snap-align: start; }
+}
+@media (max-width: 760px) and (orientation: portrait) {
+  .note-page {
+    padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+             max(3px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  .note-composition {
+    width: min(100%, 510px);
+    grid-template: minmax(0, var(--opening-height, 1fr)) minmax(0, 1fr) / minmax(0, 1fr);
+    gap: clamp(7px, 2dvh, 20px);
+    padding-block: clamp(8px, 2.2dvh, 20px);
+  }
+  .note-composition .note-opening {
+    grid-area: 1 / 1; justify-self: start; width: var(--opening-width, 93%); object-position: left 45%;
+  }
+  .note-composition .note-continuation {
+    grid-area: 2 / 1; justify-self: end; width: var(--continuation-width, 96%); object-position: right 50%;
+  }
+  .note-flowers span:nth-child(1) { width: clamp(40px, 12vw, 68px); top: 4.5%; right: 4%; }
+  .note-flowers span:nth-child(2) { width: clamp(37px, 10vw, 58px); top: auto; bottom: 17%; left: 2.5%; }
+  .note-flowers span:nth-child(3) { width: clamp(29px, 8vw, 46px); bottom: 8%; right: 4.5%; }
+}
+@media (max-height: 550px) and (orientation: landscape) {
+  .note-page { padding-block: max(4px, env(safe-area-inset-top)) max(2px, env(safe-area-inset-bottom)); }
+  .note-composition { padding-block: 2px; }
+  .note-signature { height: 27px; }
+  .note-flowers span:nth-child(2) { width: 38px; top: auto; bottom: 13%; left: 8%; }
+  .note-flowers span:nth-child(1) { width: 40px; }
+  .note-flowers span:nth-child(3) { width: 28px; }
 }
 
 .detail h1.sr-only { margin: 0; }

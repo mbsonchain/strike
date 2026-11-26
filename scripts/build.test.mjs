@@ -14,7 +14,7 @@ const sourceRoot = new URL('../', import.meta.url);
 test('every page loads one complete release, and a playback-only update changes all asset addresses', async t => {
   const root = await mkdtemp(join(tmpdir(), 'strikeout-build-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  for (const file of ['package.json', 'scripts', 'assets', 'index.html', 'mobile-preview.html', 'note.html', 'app.js', 'media.js', 'content.js', 'pages.js', 'styles.css', 'mobile.css', 'pages.css']) {
+  for (const file of ['package.json', 'scripts', 'assets', 'index.html', 'mobile-preview.html', 'note.html', 'app.js', 'media.js', 'content.js', 'pages.js', 'viewport.js', 'styles.css', 'mobile.css', 'pages.css']) {
     await cp(new URL(file, sourceRoot), join(root, file), { recursive: true });
   }
   async function build() {
@@ -34,11 +34,17 @@ test('every page loads one complete release, and a playback-only update changes 
         const noteDir = `/releases/${release}/assets/notes/`;
         assert.ok(html.includes(noteMarkup(note, noteDir)), page);
         assert.ok(html.includes(`<body data-page="${note.slug}" data-note>`), page);
-        assert.ok(html.includes(`<meta name="theme-color" content="${note.backgroundColor}">`), page);
+        if (note.scenery) {
+          assert.doesNotMatch(html, /name="theme-color"/);
+          assert.ok(html.includes(`src="${note.scenery.image}"`), page);
+        } else {
+          assert.ok(html.includes(`<meta name="theme-color" content="${note.backgroundColor}">`), page);
+        }
         assert.ok(html.includes(`style="--note-color: ${note.backgroundColor}"`), page);
-        assert.doesNotMatch(html, /<script|<iframe|Coming soon/i);
-        const artFiles = note.slug === 'about' ? ['about.svg', 'summer.svg'] : [`${note.slug}.svg`];
-        const images = [...html.matchAll(/<img [^>]*src="([^"]+)"/g)].map(match => match[1]);
+        assert.doesNotMatch(html, /<iframe|Coming soon/i);
+        assert.deepEqual([...html.matchAll(/<script[^>]*src="([^"]+)"/g)].map(m => m[1]), [`/releases/${release}/viewport.js`]);
+        const artFiles = [`${note.slug}.svg`, `${note.slug}-continuation.svg`, `${note.note.closing.art}.svg`];
+        const images = [...html.matchAll(/<img [^>]*src="([^"]+\.svg)"/g)].map(match => match[1]);
         assert.deepEqual(images, artFiles.map(file => noteDir + file), page);
         for (const file of artFiles) {
           assert.equal(await readFile(join(root, 'dist', noteDir, file), 'utf8'),
@@ -52,7 +58,7 @@ test('every page loads one complete release, and a playback-only update changes 
         assert.ok(!html.includes(`"/${asset}"`), `${page}: unversioned ${asset}`);
       }
     }
-    for (const file of ['app.js', 'media.js', 'content.js', 'pages.js', 'styles.css', 'mobile.css', 'pages.css']) {
+    for (const file of ['app.js', 'media.js', 'content.js', 'pages.js', 'viewport.js', 'styles.css', 'mobile.css', 'pages.css']) {
       assert.equal(await readFile(join(root, 'dist/releases', release, file), 'utf8'), await readFile(join(root, file), 'utf8'));
     }
     const app = await readFile(join(root, 'dist/releases', release, 'app.js'), 'utf8');

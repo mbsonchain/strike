@@ -1,6 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {pageMarkup} from '../pages.js';
+import {menuPages} from '../content.js';
+
+test('only the three handwritten web addresses are links and they work in the static markup', () => {
+  const domains = {ssc: 'studentservicecorp.org', dopo: 'getdopo.com', formal: 'desertformal.com'};
+  for (const page of menuPages) {
+    const html = pageMarkup(page, '');
+    const links = [...html.matchAll(/<a class="note-site" href="([^"]+)" target="_blank" rel="noopener"><img[^>]* alt="([^"]+)">/g)];
+    assert.deepEqual(links.map(m => [m[1], m[2]]), domains[page.slug] ? [[`https://${domains[page.slug]}/`, domains[page.slug]]] : []);
+    assert.match(html, /href="\/#catalog"/);
+  }
+});
 
 test('desktop catalog loads the live source; mobile shows its notice without an iframe request', () => {
   const page = {slug: 'catalog'};

@@ -1,6 +1,7 @@
 import { film, menuPages, pages } from './content.js';
 import { mountFilm, handleSoundShortcut } from './media.js';
 import { pageMarkup, escapeHtml } from './pages.js';
+import { scrollToContent } from './viewport.js';
 
 const app = document.querySelector('#app');
 const browserTheme = document.querySelector('meta[name="theme-color"]');
@@ -9,11 +10,6 @@ const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const markAttribute = page => page?.mark ? ` data-mark="${escapeHtml(page.mark)}"` : '';
 const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout entrance"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
-
-function scrollToContent() {
-  // Mobile sky continues above/below the content so Safari has image pixels behind its bars.
-  window.scrollTo({ top: app.offsetTop, left: 0, behavior: 'instant' });
-}
 
 function navigate(path) {
   const destination = new URL(path, location.origin);
@@ -44,6 +40,7 @@ function render(focus = false) {
   const page = pages.find(item => item.slug === slug);
   document.documentElement.style.setProperty('--note-color', page?.backgroundColor || '');
   browserTheme.content = page?.backgroundColor || homeColor;
+  browserTheme.media = page?.scenery ? 'not all' : 'all';
   document.body.dataset.page = page?.slug || '';
   document.body.toggleAttribute('data-note', Boolean(page?.note));
   document.title = page ? `${page.title} — Strikeout` : 'Strikeout';
@@ -107,8 +104,6 @@ mobile.addEventListener('change', () => {
   app.querySelector('.catalog-row[data-preview]')?.removeAttribute('data-preview');
   scrollToContent();
 });
-window.addEventListener('pageshow', scrollToContent);
-window.addEventListener('resize', scrollToContent);
 window.addEventListener('keydown', event => {
   handleSoundShortcut(event, filmPlayer, !mobile.matches);
 });

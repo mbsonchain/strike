@@ -8,24 +8,45 @@ export const film = {
 export const menuPages = [
   {
     slug: 'studios', title: 'Studios', backgroundColor: '#799dbb',
-    note: 'Strikeout Studios is an interdisciplinary production studio developing original media and IP that transcends individual mediums.',
+    scenery: { image: '/assets/strikeout-sky.jpg' },
+    note: {
+      opening: 'Strikeout Studios is an interdisciplinary production studio',
+      continuation: 'developing original media and IP that transcends individual mediums.',
+      closing: { art: 'studios-signoff', text: 'people over platforms!' },
+    },
   },
   {
     slug: 'ssc', title: 'Service', mark: 'service', backgroundColor: '#000000',
-    note: 'Student Service Corp is a 501(c)3 not-for-profit championing grassroots community projects across the United States with a focus on youth, the unhoused, and sustainability.',
+    note: {
+      opening: 'Student Service Corp is a 501(c)3 not-for-profit championing grassroots community projects',
+      continuation: 'across the United States with a focus on youth, the unhoused, and sustainability.',
+      closing: { art: 'ssc-site', text: 'studentservicecorp.org', href: 'https://studentservicecorp.org/' },
+    },
   },
   {
     slug: 'dopo', title: 'Dopo', backgroundColor: '#fbae9d',
-    note: 'Dopo is a personalized intelligence company building Venice (!!), a self-improving local model with proprietary architecture trained in-house.',
+    note: {
+      opening: 'Dopo is a personalized intelligence company building Venice (!!),',
+      continuation: 'a self-improving local model with proprietary architecture trained in-house.',
+      closing: { art: 'dopo-site', text: 'getdopo.com', href: 'https://getdopo.com/' },
+    },
   },
   {
     slug: 'formal', title: 'Formal', backgroundColor: '#cbb98f',
-    note: 'FORMAL is a sustainable design label working across art, architecture, fashion, and media, supported by desert FORMAL, a live broadcasting and distribution network.',
+    scenery: { image: '/assets/formal-camo-landscape.jpg', portrait: '/assets/formal-camo-portrait.jpg' },
+    note: {
+      opening: 'FORMAL is a sustainable design label working across art, architecture, fashion, and media,',
+      continuation: 'supported by desert FORMAL, a live broadcasting and distribution network.',
+      closing: { art: 'formal-site', text: 'desertformal.com', href: 'https://desertformal.com/' },
+    },
   },
   {
-    slug: 'about', title: 'About', mark: 'flower', backgroundColor: '#f3b6c6',
-    note: 'STRIKEOUT is an independent holding company and venture development ecosystem for SPs and small businesses building SUMMER.',
-    acronym: 'Superintelligence (the good kind). Urban development and architecture. Media (inclusive). Manufacturing and design. Events and community. Retail and consumer product.',
+    slug: 'about', title: 'About', mark: 'flower', backgroundColor: '#ffffff',
+    note: {
+      opening: 'STRIKEOUT is an independent holding company and',
+      continuation: 'venture development ecosystem for SPs and small businesses building SUMMER.',
+      closing: { art: 'summer', text: 'Superintelligence (the good kind). Urban development and architecture. Media (inclusive). Manufacturing and design. Events and community. Retail and consumer product.' },
+    },
   },
 ];
 

@@ -5,13 +5,22 @@ const frameUrl = 'https://desertformal.com/embed/network';
 const archiveFolders = numbers => `<div class="archive-folders" aria-label="Catalog archives ${numbers[0]}–${numbers.at(-1)}">${numbers.map(n => `<details class="archive-folder"><summary><span class="folder-shape" aria-hidden="true"></span><span>Archive ${String(n).padStart(2, '0')}</span></summary><p>Nothing archived yet.</p></details>`).join('')}</div>`;
 
 export function noteMarkup(page, assetDirectory = new URL('./assets/notes/', import.meta.url).pathname) {
-  const acronym = page.acronym
-    ? `<img class="note-art note-acronym" src="${assetDirectory}summer.svg" alt="${escapeHtml(page.acronym)}">`
-    : '';
-  return `<section class="note-page" aria-labelledby="page-title">
+  const { opening, continuation, closing } = page.note;
+  const scenery = page.scenery && `<picture class="note-scenery" aria-hidden="true">
+    ${page.scenery.portrait ? `<source media="(orientation: portrait)" srcset="${escapeHtml(page.scenery.portrait)}">` : ''}
+    <img src="${escapeHtml(page.scenery.image)}" alt="" fetchpriority="high">
+  </picture>`;
+  const flowers = page.slug === 'about'
+    ? '<div class="note-flowers" aria-hidden="true"><span></span><span></span><span></span></div>' : '';
+  const signature = `<img class="note-signature" src="${assetDirectory}${closing.art}.svg" alt="${escapeHtml(closing.text)}">`;
+  return `${scenery || ''}<section class="note-page" aria-labelledby="page-title">
     <h1 id="page-title" class="sr-only" tabindex="-1">${escapeHtml(page.title)}</h1>
-    <img class="note-art" src="${assetDirectory}${page.slug}.svg" alt="${escapeHtml(page.note)}">
-    ${acronym}
+    ${flowers}
+    <div class="note-composition">
+      <img class="note-opening" src="${assetDirectory}${page.slug}.svg" alt="${escapeHtml(opening)}">
+      <img class="note-continuation" src="${assetDirectory}${page.slug}-continuation.svg" alt="${escapeHtml(continuation)}">
+    </div>
+    <div class="note-ending">${closing.href ? `<a class="note-site" href="${escapeHtml(closing.href)}" target="_blank" rel="noopener">${signature}<span class="sr-only"> (opens in a new tab)</span></a>` : signature}</div>
     ${back}
   </section>`;
 }
