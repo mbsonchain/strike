@@ -93,7 +93,9 @@ app.addEventListener('click', event => {
     navigate('/#video');
   } else if (control?.matches('.view-switch')) {
     setView(app.querySelector('.experience').dataset.view === 'video' ? 'catalog' : 'video');
-  } else if (!control || control.matches('.film-sound')) {
+  } else if (control?.matches('.film-sound')) {
+    filmPlayer?.activateFilm();
+  } else if (!control) {
     filmPlayer?.toggleSound();
   }
 });

@@ -5,7 +5,7 @@ A static site using the original Strikeout sky photograph, S artwork and Articul
 ## Experience
 
 - The homepage opens with the stationary S. Clicking it opens the film, which automatically starts muted. Direct `/#video` visits also autoplay. The small S returns to the entrance.
-- The native 1080p MP4 plays inline and loops. Clicking the film or the surrounding page only changes `video.muted`; it never requests playback, seeks, reloads or replaces the video. Desktop Space also toggles sound. Links and other controls retain their normal actions.
+- The native 1080p MP4 plays inline and loops. If the browser blocks autoplay, tapping the film starts playback. Otherwise, tapping the film toggles sound. Clicking the surrounding page and pressing desktop Space toggle sound independently of playback. Links and other controls retain their normal actions.
 - Desktop has a wordless film/catalog switch. Switching views or changing between the film/catalog hashes preserves the video, its playback position and its sound setting. Playback continues in the catalog view. Opening a separate subpage or returning to the entrance releases the player.
 - Mobile shows the logo, horizontal film and five catalog links together, with no view switch. Content is centered and stationary. The sky extends half a large viewport above and below the content, with a blue fallback; scrolling is locked while pinch zoom remains available. Compact screens use smaller spacing and film sizing.
 - The menu links to Studios, Service (Student Service Corp), Dopo, Formal and About. Catalog labels use `articulat-cf` at weight 900. The original archive is available at `/catalog`.
@@ -13,7 +13,7 @@ A static site using the original Strikeout sky photograph, S artwork and Articul
 - Desktop `/catalog` keeps the sky around a live Desert / FORMAL embed, with six smaller, empty archive folders, three on each side of the centered inset. The source is `https://desertformal.com/embed/network`, which reuses Desert/Formal's published offering content without its surrounding navigation or clocks. New Desert/Formal publications appear on the next load or refresh, without a Strikeout content update. The inset's Desert/FORMAL switch stays usable and offering links open full detail pages in new tabs. Archive folders expand to an empty-state message.
 - Mobile `/catalog` displays “404” and “catalog available on desktop only” centered over the sky, with the S and back navigation. It does not create or load an iframe. Crossing the 760px breakpoint updates the page.
 - Desktop catalog rows extend to both viewport edges without borders or divider lines. Mobile catalog taps first preview the section's highlight; a second tap on that same section opens it. Selecting another row switches the preview. Returning from a subpage or crossing the desktop/mobile breakpoint clears the selection. Desktop clicks and keyboard activation open links directly.
-- No visible film title, native controls, YouTube integration or white focus rectangles. The transparent film button remains keyboard accessible. If device settings deny muted autoplay, a separate play control allows retry; ordinary sound taps never run retry logic. Media errors expose a direct film link.
+- The original poster covers the player until the film starts. The transparent film button is keyboard accessible and uses the same surface for a blocked start and for sound. Media errors expose a direct film link.
 
 ## Content and media
 

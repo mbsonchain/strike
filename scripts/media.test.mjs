@@ -28,13 +28,13 @@ function setup(t, playResult) {
   const controller = mountFilm(frame, film);
   const video = frame.children.find(node => node.tag === 'video');
   const sound = frame.children.find(node => node.className === 'film-sound');
-  const retry = frame.children.find(node => node.className === 'film-retry');
+  const poster = frame.children.find(node => node.className === 'film-poster');
   t.after(() => controller.destroy());
-  return { frame, controller, video, sound, retry };
+  return { frame, controller, video, sound, poster };
 }
 
 test('native film starts muted, inline and looping without controls or third-party players', t => {
-  const { video, frame, sound } = setup(t);
+  const { video, frame, sound, poster } = setup(t);
   assert.equal(video.src, film.url);
   assert.equal(video.poster, film.poster);
   assert.equal(video.autoplay, true);
@@ -43,6 +43,10 @@ test('native film starts muted, inline and looping without controls or third-par
   assert.equal(video.playsInline, true);
   assert.equal(video.loop, true);
   assert.equal(video.controls, false);
+  assert.equal(poster.src, film.poster);
+  assert.ok(!poster.hidden);
+  assert.deepEqual(frame.children.filter(node => node.tag === 'button'), [sound]);
+  assert.ok(!sound.textContent && !sound.children.length);
   assert.equal(sound.attributes['aria-pressed'], 'false');
   assert.deepEqual(video.calls, ['play']);
   assert.ok(!frame.children.some(node => ['iframe', 'script'].includes(node.tag)));
@@ -76,33 +80,50 @@ test('sound follows the actual video mute setting instead of a second state vari
   assert.equal(video.muted, true);
 });
 
-test('browser-denied autoplay has a separate retry; sound toggles never trigger it', async t => {
-  const { controller, video, retry } = setup(t, Promise.reject(Object.assign(new Error('Denied'), { name: 'NotAllowedError' })));
+test('a blocked start keeps the original poster and accepts a tap on the unmarked film surface', async t => {
+  const denied = Object.assign(new Error('Denied'), { name: 'NotAllowedError' });
+  const { controller, frame, video, sound, poster } = setup(t, Promise.reject(denied));
   await Promise.resolve();
-  assert.equal(retry.hidden, false);
+  assert.ok(!poster.hidden);
+  assert.deepEqual(frame.children.filter(node => node.tag === 'button'), [sound]);
+  assert.ok(!sound.textContent && !sound.children.length);
+  assert.equal(sound.attributes['aria-label'], 'Start film');
+  assert.ok(!('aria-pressed' in sound.attributes));
   video.calls.length = 0;
   controller.toggleSound();
   controller.toggleSound();
   assert.deepEqual(video.calls, []);
-  video.playResult = Promise.resolve();
-  retry.events.click();
+  video.playResult = Promise.reject(denied);
+  controller.activateFilm();
+  controller.activateFilm();
   assert.deepEqual(video.calls, ['play']);
+  await Promise.resolve();
+  assert.equal(sound.attributes['aria-label'], 'Start film');
+  video.playResult = Promise.resolve();
+  controller.activateFilm();
+  assert.deepEqual(video.calls, ['play', 'play']);
   assert.equal(video.muted, true);
   video.events.playing();
-  assert.equal(retry.hidden, true);
+  assert.equal(poster.hidden, true);
+  assert.equal(sound.attributes['aria-label'], 'Film sound');
+  assert.equal(sound.attributes['aria-pressed'], 'false');
+  controller.activateFilm();
+  assert.equal(video.muted, false);
+  assert.deepEqual(video.calls, ['play', 'play']);
 });
 
 test('leaving the film releases its source; a pending rejection cannot revive it', async t => {
   let rejectPlay;
-  const { controller, video, frame, retry } = setup(t, new Promise((resolve, reject) => { rejectPlay = reject; }));
+  const { controller, video, frame, sound } = setup(t, new Promise((resolve, reject) => { rejectPlay = reject; }));
   controller.destroy();
   assert.deepEqual(video.calls, ['play', 'pause', 'remove:src', 'load']);
   rejectPlay(Object.assign(new Error('Denied'), { name: 'NotAllowedError' }));
   await Promise.resolve();
   assert.deepEqual(frame.children, []);
-  assert.equal(retry.hidden, true);
+  assert.equal(sound.attributes['aria-label'], 'Film sound');
   video.calls.length = 0;
   controller.toggleSound();
+  controller.activateFilm();
   assert.deepEqual(video.calls, []);
 });
 

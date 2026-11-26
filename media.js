@@ -20,35 +20,57 @@ export function mountFilm(frame, film) {
   video.setAttribute('aria-label', film.title);
   video.src = film.url;
 
+  // Keep the original artwork above any native play badge until the first frame plays.
+  const poster = document.createElement(film.poster ? 'img' : 'span');
+  poster.className = 'film-poster';
+  poster.setAttribute('aria-hidden', 'true');
+  if (film.poster) {
+    poster.alt = '';
+    poster.src = film.poster;
+  }
   const sound = document.createElement('button');
   sound.className = 'film-sound';
   sound.type = 'button';
-  sound.setAttribute('aria-label', 'Film sound');
-  sound.setAttribute('aria-pressed', 'false');
   const announcement = document.createElement('span');
   announcement.className = 'sr-only';
   announcement.setAttribute('aria-live', 'polite');
 
-  // Only a browser-denied autoplay attempt exposes this separate retry control.
-  const retry = document.createElement('button');
-  retry.className = 'film-retry';
-  retry.type = 'button';
-  retry.textContent = '▶';
-  retry.setAttribute('aria-label', 'Play film');
-  retry.hidden = true;
   let disposed = false;
-  function start() {
-    retry.hidden = true;
-    video.play().catch(error => {
-      if (!disposed && error.name === 'NotAllowedError') retry.hidden = false;
-    });
+  let needsGesture = false;
+  let playPending = false;
+  function syncControl() {
+    sound.setAttribute('aria-label', needsGesture ? 'Start film' : 'Film sound');
+    if (needsGesture) sound.removeAttribute('aria-pressed');
+    else sound.setAttribute('aria-pressed', String(!video.muted));
   }
-  retry.addEventListener('click', start);
-  video.addEventListener('playing', () => { retry.hidden = true; });
+  async function start() {
+    if (playPending) return;
+    playPending = true;
+    try {
+      await video.play();
+    } catch (error) {
+      if (!disposed && !sound.disabled && error.name === 'NotAllowedError') {
+        needsGesture = true;
+        syncControl();
+      }
+    } finally {
+      playPending = false;
+    }
+  }
+  function toggleSound() {
+    if (disposed || sound.disabled) return;
+    video.muted = !video.muted;
+    syncControl();
+    announcement.textContent = video.muted ? 'Sound off' : 'Sound on';
+  }
+  video.addEventListener('playing', () => {
+    poster.hidden = true;
+    needsGesture = false;
+    syncControl();
+  });
   video.addEventListener('error', () => {
     if (disposed) return;
     sound.disabled = true;
-    retry.hidden = true;
     const message = document.createElement('p');
     message.className = 'film-error';
     message.textContent = 'The film could not load. ';
@@ -58,15 +80,16 @@ export function mountFilm(frame, film) {
     message.append(link);
     frame.replaceChildren(message);
   });
-  frame.append(video, sound, retry, announcement);
+  syncControl();
+  frame.append(video, poster, sound, announcement);
   start();
 
   return {
-    toggleSound() {
-      if (disposed) return;
-      video.muted = !video.muted;
-      sound.setAttribute('aria-pressed', String(!video.muted));
-      announcement.textContent = video.muted ? 'Sound off' : 'Sound on';
+    toggleSound,
+    activateFilm() {
+      if (disposed || sound.disabled) return;
+      if (needsGesture) start();
+      else toggleSound();
     },
     destroy() {
       disposed = true;
