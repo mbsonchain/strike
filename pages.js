@@ -5,9 +5,13 @@ const frameUrl = 'https://desertformal.com/embed/network';
 const archiveFolders = numbers => `<div class="archive-folders" aria-label="Catalog archives ${numbers[0]}–${numbers.at(-1)}">${numbers.map(n => `<details class="archive-folder"><summary><span class="folder-shape" aria-hidden="true"></span><span>Archive ${String(n).padStart(2, '0')}</span></summary><p>Nothing archived yet.</p></details>`).join('')}</div>`;
 
 export function noteMarkup(page, assetDirectory = new URL('./assets/notes/', import.meta.url).pathname) {
+  const acronym = page.acronym
+    ? `<img class="note-art note-acronym" src="${assetDirectory}summer.svg" alt="${escapeHtml(page.acronym)}">`
+    : '';
   return `<section class="note-page" aria-labelledby="page-title">
     <h1 id="page-title" class="sr-only" tabindex="-1">${escapeHtml(page.title)}</h1>
     <img class="note-art" src="${assetDirectory}${page.slug}.svg" alt="${escapeHtml(page.note)}">
+    ${acronym}
     ${back}
   </section>`;
 }

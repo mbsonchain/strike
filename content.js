@@ -7,24 +7,25 @@ export const film = {
 
 export const menuPages = [
   {
-    slug: 'studios', title: 'Studios',
+    slug: 'studios', title: 'Studios', backgroundColor: '#799dbb',
     note: 'Strikeout Studios is an interdisciplinary production studio developing original media and IP that transcends individual mediums.',
   },
   {
-    slug: 'ssc', title: 'Service', mark: 'service',
+    slug: 'ssc', title: 'Service', mark: 'service', backgroundColor: '#000000',
     note: 'Student Service Corp is a 501(c)3 not-for-profit championing grassroots community projects across the United States with a focus on youth, the unhoused, and sustainability.',
   },
   {
-    slug: 'dopo', title: 'Dopo',
+    slug: 'dopo', title: 'Dopo', backgroundColor: '#fbae9d',
     note: 'Dopo is a personalized intelligence company building Venice (!!), a self-improving local model with proprietary architecture trained in-house.',
   },
   {
-    slug: 'formal', title: 'Formal',
+    slug: 'formal', title: 'Formal', backgroundColor: '#cbb98f',
     note: 'FORMAL is a sustainable design label working across art, architecture, fashion, and media, supported by desert FORMAL, a live broadcasting and distribution network.',
   },
   {
-    slug: 'about', title: 'About', mark: 'flower',
-    note: 'STRIKEOUT is an independent holding company and venture development ecosystem for SPs and small businesses building SUMMER. Superintelligence (the good kind). Urban development and architecture. Media (inclusive). Manufacturing and design. Events and community. Retail and consumer product.',
+    slug: 'about', title: 'About', mark: 'flower', backgroundColor: '#f3b6c6',
+    note: 'STRIKEOUT is an independent holding company and venture development ecosystem for SPs and small businesses building SUMMER.',
+    acronym: 'Superintelligence (the good kind). Urban development and architecture. Media (inclusive). Manufacturing and design. Events and community. Retail and consumer product.',
   },
 ];
 

@@ -1,10 +1,10 @@
-import { mkdir, copyFile, cp, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, copyFile, cp, readdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { menuPages, pages } from '../content.js';
+import { pages } from '../content.js';
 import { escapeHtml, noteMarkup } from '../pages.js';
 
 const runtimeFiles = ['app.js', 'media.js', 'content.js', 'pages.js', 'styles.css', 'mobile.css', 'pages.css'];
-const noteAssets = menuPages.map(page => `assets/notes/${page.slug}.svg`);
+const noteAssets = (await readdir('assets/notes')).filter(file => file.endsWith('.svg')).sort().map(file => `assets/notes/${file}`);
 const sourceFiles = [...runtimeFiles, 'index.html', 'mobile-preview.html', 'note.html', ...noteAssets];
 const sources = new Map(await Promise.all(sourceFiles.map(async file => [file, await readFile(file, 'utf8')])));
 const hash = createHash('sha256');
@@ -30,6 +30,7 @@ await writeFile('dist/mobile-preview.html', versionHtml(sources.get('mobile-prev
 for (const page of pages) {
   const pageHtml = page.note
     ? noteTemplate.replace('{{title}}', escapeHtml(page.title)).replace('{{slug}}', page.slug)
+        .replaceAll('{{color}}', page.backgroundColor)
         .replace('{{note}}', () => noteMarkup(page, `${releasePath}/assets/notes/`))
     : html.replace('<body>', `<body data-page="${page.slug}">`)
         .replace('<title>Strikeout</title>', `<title>${page.title} — Strikeout</title>`);

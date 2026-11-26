@@ -34,9 +34,16 @@ test('every page loads one complete release, and a playback-only update changes 
         const noteDir = `/releases/${release}/assets/notes/`;
         assert.ok(html.includes(noteMarkup(note, noteDir)), page);
         assert.ok(html.includes(`<body data-page="${note.slug}" data-note>`), page);
+        assert.ok(html.includes(`<meta name="theme-color" content="${note.backgroundColor}">`), page);
+        assert.ok(html.includes(`style="--note-color: ${note.backgroundColor}"`), page);
         assert.doesNotMatch(html, /<script|<iframe|Coming soon/i);
-        assert.equal(await readFile(join(root, 'dist', noteDir, `${note.slug}.svg`), 'utf8'),
-          await readFile(join(root, 'assets/notes', `${note.slug}.svg`), 'utf8'));
+        const artFiles = note.slug === 'about' ? ['about.svg', 'summer.svg'] : [`${note.slug}.svg`];
+        const images = [...html.matchAll(/<img [^>]*src="([^"]+)"/g)].map(match => match[1]);
+        assert.deepEqual(images, artFiles.map(file => noteDir + file), page);
+        for (const file of artFiles) {
+          assert.equal(await readFile(join(root, 'dist', noteDir, file), 'utf8'),
+            await readFile(join(root, 'assets/notes', file), 'utf8'));
+        }
       } else {
         assets.push('app.js');
       }

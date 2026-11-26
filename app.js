@@ -3,6 +3,8 @@ import { mountFilm, handleSoundShortcut } from './media.js';
 import { pageMarkup, escapeHtml } from './pages.js';
 
 const app = document.querySelector('#app');
+const browserTheme = document.querySelector('meta[name="theme-color"]');
+const homeColor = browserTheme.content;
 const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const markAttribute = page => page?.mark ? ` data-mark="${escapeHtml(page.mark)}"` : '';
@@ -40,6 +42,8 @@ function render(focus = false) {
   filmPlayer?.destroy();
   filmPlayer = null;
   const page = pages.find(item => item.slug === slug);
+  document.documentElement.style.setProperty('--note-color', page?.backgroundColor || '');
+  browserTheme.content = page?.backgroundColor || homeColor;
   document.body.dataset.page = page?.slug || '';
   document.body.toggleAttribute('data-note', Boolean(page?.note));
   document.title = page ? `${page.title} — Strikeout` : 'Strikeout';

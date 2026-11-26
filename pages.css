@@ -1,12 +1,20 @@
 /* The five handwritten sheets sit directly on their section backgrounds. */
-body[data-page="studios"] { --note-color: #799dbb; --note-image: url('/assets/strikeout-sky.jpg'); }
-body[data-page="ssc"] { --note-color: #000; --note-ink: #fff; }
-body[data-page="dopo"] { --note-color: #fbae9d; }
-body[data-page="formal"] { --note-color: #cbb98f; --note-image: url('/assets/formal-camo-landscape.jpg'); }
-body[data-page="about"] { --note-color: #f3b6c6; }
-:root:has(body[data-note]) { background-color: transparent; }
-body[data-note] { height: auto; padding: 0; background-color: var(--note-color); color: var(--note-ink, #080a0d); }
+body[data-page="studios"] { --note-image: url('/assets/strikeout-sky.jpg'); }
+body[data-page="formal"] { --note-image: url('/assets/formal-camo-landscape.jpg'); }
+:root:has(body[data-note]) { background-color: var(--note-color); overflow: hidden; overscroll-behavior: none; }
+body[data-note] { height: auto; padding: 0; background-color: var(--note-color); color: #fff; }
 body[data-note] .sky { display: none; }
+/* Extend the background behind the browser bars without enlarging the sheet. */
+body[data-note]::before {
+  content: '';
+  position: fixed;
+  inset: -32px;
+  inset-block: calc(-1 * max(32px, 12lvh, env(safe-area-inset-top), env(safe-area-inset-bottom)));
+  inset-inline: calc(-1 * max(24px, 5lvw, env(safe-area-inset-left), env(safe-area-inset-right)));
+  z-index: 0;
+  pointer-events: none;
+  background: var(--note-color) var(--note-image, none) center / cover no-repeat;
+}
 .note-page {
   display: grid;
   grid-template-rows: minmax(0, 1fr) 44px;
@@ -15,8 +23,8 @@ body[data-note] .sky { display: none; }
   height: 100dvh;
   padding: max(18px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
            max(6px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
-  background: var(--note-color) var(--note-image, none) center / cover no-repeat;
 }
+body[data-page="about"] .note-page { grid-template-rows: minmax(0, 1fr) min(38vw, 23%, 215px) 44px; }
 .note-art {
   display: block;
   width: min(100%, 724px);
@@ -24,10 +32,14 @@ body[data-note] .sky { display: none; }
   min-width: 0;
   min-height: 0;
   object-fit: contain;
+  filter: grayscale(1) invert(1) drop-shadow(0 0 .4px #fff) drop-shadow(0 .7px .8px rgb(48 32 36 / .88));
 }
-.note-page .back { font: 26px/1 Arial, sans-serif; }
+.note-acronym { object-position: center bottom; }
+.note-page .back { font: 26px/1 Arial, sans-serif; text-shadow: 0 1px 2px rgb(48 32 36 / .65); }
 .note-page h1:focus { outline: none; }
 body[data-page="ssc"] .note-art { filter: invert(1); }
+/* The camo sheet already includes an outline around the pen strokes. */
+body[data-page="formal"] .note-art { filter: grayscale(1) invert(1) contrast(1.15); }
 @media (max-width: 760px) {
   body[data-page="formal"] { --note-image: url('/assets/formal-camo-portrait.jpg'); }
 }
