@@ -28,9 +28,6 @@ body[data-note] .sky { display: none; }
 .note-page .back { font: 26px/1 Arial, sans-serif; }
 .note-page h1:focus { outline: none; }
 body[data-page="ssc"] .note-art { filter: invert(1); }
-body[data-page="formal"] .note-art {
-  filter: drop-shadow(0 0 1px #ffefd4) drop-shadow(0 0 .7px #ffefd4);
-}
 @media (max-width: 760px) {
   body[data-page="formal"] { --note-image: url('/assets/formal-camo-portrait.jpg'); }
 }
