@@ -22,7 +22,7 @@ body:has(.detail[data-mark]) .sky img, body[data-page="formal"] .sky img { visib
 .formal-space { flex: 1; }
 .detail[data-mark] .detail-content::after {
   content: '';
-  width: min(80%, 740px);
+  width: calc(min(80%, 740px) * var(--mark-scale, 1));
   height: clamp(54px, 9vw, 112px);
   margin-top: clamp(24px, 5svh, 48px);
   background-image: var(--three-marks);
