@@ -24,7 +24,7 @@ body[data-note]::before {
   padding: max(18px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
            max(6px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
 }
-body[data-page="about"] .note-page { grid-template-rows: minmax(0, 1fr) min(38vw, 23%, 215px) 44px; }
+body[data-page="about"] .note-page { grid-template-rows: minmax(0, 1fr) min(50vw, 23%, 215px) 44px; }
 .note-art {
   display: block;
   width: min(100%, 724px);
@@ -32,14 +32,12 @@ body[data-page="about"] .note-page { grid-template-rows: minmax(0, 1fr) min(38vw
   min-width: 0;
   min-height: 0;
   object-fit: contain;
-  filter: grayscale(1) invert(1) drop-shadow(0 0 .4px #fff) drop-shadow(0 .7px .8px rgb(48 32 36 / .88));
+  filter: drop-shadow(0 .7px .8px rgb(48 32 36 / .78));
 }
 .note-acronym { object-position: center bottom; }
 .note-page .back { font: 26px/1 Arial, sans-serif; text-shadow: 0 1px 2px rgb(48 32 36 / .65); }
 .note-page h1:focus { outline: none; }
-body[data-page="ssc"] .note-art { filter: invert(1); }
-/* The camo sheet already includes an outline around the pen strokes. */
-body[data-page="formal"] .note-art { filter: grayscale(1) invert(1) contrast(1.15); }
+body:is([data-page="ssc"], [data-page="formal"]) .note-art { filter: none; }
 @media (max-width: 760px) {
   body[data-page="formal"] { --note-image: url('/assets/formal-camo-portrait.jpg'); }
 }
