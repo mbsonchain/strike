@@ -6,33 +6,26 @@ export const film = {
 };
 
 export const menuPages = [
-  { slug: 'studios', title: 'Studios', body: '' },
-  { slug: 'ssc', title: 'Service', body: 'Student Service Corp', mark: 'service' },
-  { slug: 'dopo', title: 'Dopo', body: '' },
-  { slug: 'formal', title: 'Formal', body: '' },
-  { slug: 'about', title: 'About', body: '', mark: 'flower' },
+  {
+    slug: 'studios', title: 'Studios',
+    note: 'Strikeout Studios is an interdisciplinary production studio developing original media and IP that transcends individual mediums.',
+  },
+  {
+    slug: 'ssc', title: 'Service', mark: 'service',
+    note: 'Student Service Corp is a 501(c)3 not-for-profit championing grassroots community projects across the United States with a focus on youth, the unhoused, and sustainability.',
+  },
+  {
+    slug: 'dopo', title: 'Dopo',
+    note: 'Dopo is a personalized intelligence company building Venice (!!), a self-improving local model with proprietary architecture trained in-house.',
+  },
+  {
+    slug: 'formal', title: 'Formal',
+    note: 'FORMAL is a sustainable design label working across art, architecture, fashion, and media, supported by desert FORMAL, a live broadcasting and distribution network.',
+  },
+  {
+    slug: 'about', title: 'About', mark: 'flower',
+    note: 'STRIKEOUT is an independent holding company and venture development ecosystem for SPs and small businesses building SUMMER. Superintelligence (the good kind). Urban development and architecture. Media (inclusive). Manufacturing and design. Events and community. Retail and consumer product.',
+  },
 ];
 
-export const pages = [...menuPages, { slug: 'catalog', title: 'Catalog', body: '' }];
-
-// Original Strikeout Dopo copy, preserved as a placeholder.
-export const dopo = {
-  "colors": [
-    "#FBAE9D",
-    "#D6D4F5",
-    "#D6EBF6",
-    "#3E4F63"
-  ],
-  "desktop": [
-    "DOPO is the personalized intelligence company. Our mission is to bring on-device, personalized intelligence to the world by building foundational models with nontraditional architecture.",
-    "VENICE is an artificial intelligence (AI) model developed from scratch by Dopo Research Labs (DRL). Venice-1, the company's debut offering, was released internally in December 2025.",
-    "Venice-2, the company's debut public offering, will be available in mid-2026 via the Dopo app. The Dopo app is currently available on the Apple app store by invitation only.",
-    "Dopo is currently building and testing Venice-2 at Founders, Inc. in San Francisco, California. Please reach out to us at support@getdopo.com or visit getdopo.com to learn more."
-  ],
-  "mobile": [
-    "The personalized intelligence company.",
-    "Your world, your way.",
-    "The personalized intelligence company.",
-    "Your world, your way."
-  ]
-};
+export const pages = [...menuPages, { slug: 'catalog', title: 'Catalog' }];

@@ -5,6 +5,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { execFile } from 'node:child_process';
+import { menuPages } from '../content.js';
+import { noteMarkup } from '../pages.js';
 
 const exec = promisify(execFile);
 const sourceRoot = new URL('../', import.meta.url);
@@ -12,7 +14,7 @@ const sourceRoot = new URL('../', import.meta.url);
 test('every page loads one complete release, and a playback-only update changes all asset addresses', async t => {
   const root = await mkdtemp(join(tmpdir(), 'strikeout-build-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  for (const file of ['package.json', 'scripts', 'assets', 'index.html', 'mobile-preview.html', 'app.js', 'media.js', 'content.js', 'pages.js', 'styles.css', 'mobile.css', 'pages.css']) {
+  for (const file of ['package.json', 'scripts', 'assets', 'index.html', 'mobile-preview.html', 'note.html', 'app.js', 'media.js', 'content.js', 'pages.js', 'styles.css', 'mobile.css', 'pages.css']) {
     await cp(new URL(file, sourceRoot), join(root, file), { recursive: true });
   }
   async function build() {
@@ -26,7 +28,19 @@ test('every page loads one complete release, and a playback-only update changes 
         assert.ok(!html.includes('data-mobile-preview'));
         continue;
       }
-      for (const asset of ['app.js', 'styles.css', 'mobile.css', 'pages.css']) {
+      const note = menuPages.find(entry => page === `${entry.slug}.html`);
+      const assets = ['styles.css', 'mobile.css', 'pages.css'];
+      if (note) {
+        const noteDir = `/releases/${release}/assets/notes/`;
+        assert.ok(html.includes(noteMarkup(note, noteDir)), page);
+        assert.ok(html.includes(`<body data-page="${note.slug}" data-note>`), page);
+        assert.doesNotMatch(html, /<script|<iframe|Coming soon/i);
+        assert.equal(await readFile(join(root, 'dist', noteDir, `${note.slug}.svg`), 'utf8'),
+          await readFile(join(root, 'assets/notes', `${note.slug}.svg`), 'utf8'));
+      } else {
+        assets.push('app.js');
+      }
+      for (const asset of assets) {
         assert.ok(html.includes(`/releases/${release}/${asset}`), `${page}: ${asset}`);
         assert.ok(!html.includes(`"/${asset}"`), `${page}: unversioned ${asset}`);
       }
@@ -44,7 +58,7 @@ test('every page loads one complete release, and a playback-only update changes 
   for (const [slug, title] of [['ssc', 'Service'], ['catalog', 'Catalog']]) {
     const html = await readFile(join(root, 'dist', `${slug}.html`), 'utf8');
     assert.ok(html.includes(`<title>${title} — Strikeout</title>`));
-    assert.ok(html.includes(`<body data-page="${slug}">`), 'the page theme is available before JavaScript runs');
+    assert.ok(html.includes(`<body data-page="${slug}"`), 'the page theme is available before JavaScript runs');
   }
   assert.equal(await build(), first, 'unchanged builds keep the same addresses');
   const mediaPath = join(root, 'media.js');

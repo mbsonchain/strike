@@ -1,21 +1,19 @@
-import { dopo } from './content.js';
+export const escapeHtml = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 
 const back = '<nav class="controls" aria-label="Page navigation"><a class="back" href="/#catalog" aria-label="Back to catalog">←</a></nav>';
 const frameUrl = 'https://desertformal.com/embed/network';
 const archiveFolders = numbers => `<div class="archive-folders" aria-label="Catalog archives ${numbers[0]}–${numbers.at(-1)}">${numbers.map(n => `<details class="archive-folder"><summary><span class="folder-shape" aria-hidden="true"></span><span>Archive ${String(n).padStart(2, '0')}</span></summary><p>Nothing archived yet.</p></details>`).join('')}</div>`;
 
-export function pageMarkup(page, logo, escape, isMobile = false) {
-  if (page.slug === 'dopo') {
-    return `<section class="dopo-page" role="button" tabindex="0" aria-label="Dopo. Click to change color and read more." data-dopo-index="0">
-      <h1 id="page-title" class="sr-only">Dopo</h1>
-      <div class="dopo-content"><img class="dopo-logo" src="/assets/dopo-logo.png" alt="Dopo" width="400" height="159">
-        <div class="dopo-copy" aria-live="polite"><p class="dopo-desktop-copy">${escape(dopo.desktop[0])}</p><p class="dopo-mobile-copy">${escape(dopo.mobile[0])}</p></div>
-      </div>
-    </section><div class="dopo-navigation">${back}</div>`;
-  }
-  if (page.slug === 'formal') {
-    return `<section class="detail formal-page" aria-labelledby="page-title">${logo}<h1 id="page-title" class="sr-only" tabindex="-1">Formal</h1><div class="formal-space"></div>${back}</section>`;
-  }
+export function noteMarkup(page, assetDirectory = new URL('./assets/notes/', import.meta.url).pathname) {
+  return `<section class="note-page" aria-labelledby="page-title">
+    <h1 id="page-title" class="sr-only" tabindex="-1">${escapeHtml(page.title)}</h1>
+    <img class="note-art" src="${assetDirectory}${page.slug}.svg" alt="${escapeHtml(page.note)}">
+    ${back}
+  </section>`;
+}
+
+export function pageMarkup(page, logo, isMobile = false) {
+  if (page.note) return noteMarkup(page);
   if (page.slug === 'catalog') {
     if (isMobile) {
       return `<section class="detail catalog-unavailable" aria-labelledby="page-title">${logo}
@@ -30,13 +28,4 @@ export function pageMarkup(page, logo, escape, isMobile = false) {
       </div>${back}</section>`;
   }
   return null;
-}
-
-export function cycleDopo(container) {
-  const index = (Number(container.dataset.dopoIndex) + 1) % dopo.colors.length;
-  container.dataset.dopoIndex = index;
-  container.classList.toggle('dopo-dark-text', index === 1 || index === 2);
-  document.body.style.setProperty('--dopo-color', dopo.colors[index]);
-  container.querySelector('.dopo-desktop-copy').textContent = dopo.desktop[index];
-  container.querySelector('.dopo-mobile-copy').textContent = dopo.mobile[index];
 }

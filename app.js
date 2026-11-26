@@ -1,11 +1,10 @@
 import { film, menuPages, pages } from './content.js';
 import { mountFilm, handleSoundShortcut } from './media.js';
-import { pageMarkup, cycleDopo } from './pages.js';
+import { pageMarkup, escapeHtml } from './pages.js';
 
 const app = document.querySelector('#app');
 const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
-const escapeHtml = (value) => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const markAttribute = page => page?.mark ? ` data-mark="${escapeHtml(page.mark)}"` : '';
 const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout entrance"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
 
@@ -42,16 +41,16 @@ function render(focus = false) {
   filmPlayer = null;
   const page = pages.find(item => item.slug === slug);
   document.body.dataset.page = page?.slug || '';
-  document.body.style.removeProperty('--dopo-color');
+  document.body.toggleAttribute('data-note', Boolean(page?.note));
   document.title = page ? `${page.title} — Strikeout` : 'Strikeout';
   if (page || slug) {
-    app.innerHTML = (page && pageMarkup(page, logoMarkup, escapeHtml, mobile.matches)) || `<section class="detail"${markAttribute(page)} aria-labelledby="page-title">
+    app.innerHTML = (page && pageMarkup(page, logoMarkup, mobile.matches)) || `<section class="detail" aria-labelledby="page-title">
       ${logoMarkup}
-      <div class="detail-content"><h1 id="page-title" tabindex="-1">${escapeHtml(page?.title || 'Not found')}</h1>
-      <div class="detail-copy"><p>${escapeHtml(page ? page.body || 'Coming soon.' : 'This page could not be found.')}</p></div></div>
+      <div class="detail-content"><h1 id="page-title" tabindex="-1">Not found</h1>
+      <div class="detail-copy"><p>This page could not be found.</p></div></div>
       <nav class="controls" aria-label="Page navigation"><a class="back" href="/#catalog" aria-label="Back to catalog">←</a></nav>
     </section>`;
-    if (focus) (app.querySelector('.dopo-page') || app.querySelector('h1')).focus({ preventScroll: true });
+    if (focus) app.querySelector('h1').focus({ preventScroll: true });
     return;
   }
   if (!['#video', '#catalog'].includes(location.hash)) {
@@ -93,8 +92,6 @@ app.addEventListener('click', event => {
     navigate('/#video');
   } else if (control?.matches('.view-switch')) {
     setView(app.querySelector('.experience').dataset.view === 'video' ? 'catalog' : 'video');
-  } else if (control?.matches('.dopo-page')) {
-    cycleDopo(control);
   } else if (!control || control.matches('.film-sound')) {
     filmPlayer?.toggleSound();
   }
@@ -109,11 +106,6 @@ mobile.addEventListener('change', () => {
 window.addEventListener('pageshow', scrollToContent);
 window.addEventListener('resize', scrollToContent);
 window.addEventListener('keydown', event => {
-  if (event.target.matches('.dopo-page') && [' ', 'Enter'].includes(event.key)) {
-    event.preventDefault();
-    if (!event.repeat) cycleDopo(event.target);
-    return;
-  }
   handleSoundShortcut(event, filmPlayer, !mobile.matches);
 });
 render();

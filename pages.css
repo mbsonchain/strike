@@ -1,35 +1,40 @@
-/* Initiative pages have their own identities; the catalog remains on the sky. */
-body[data-page="dopo"] { background: var(--dopo-color, #fbae9d); transition: background-color .4s ease; }
-body[data-page="ssc"] { background: #000; color: #fff; }
-body:is([data-page="dopo"], [data-page="ssc"]) .sky { visibility: hidden; }
-.detail[data-mark="service"] { animation: none; }
-.detail[data-mark="service"] .site-logo img { filter: brightness(0) invert(1); }
-.dopo-page { position: relative; display: flex; justify-content: center; align-items: center; min-height: 100svh; min-height: 100dvh; padding: 3rem 2rem; cursor: pointer; user-select: none; color: white; outline: none; }
-.dopo-content { width: 100%; max-width: 700px; text-align: center; }
-.dopo-logo { display: block; width: 200px; height: auto; margin: 0 auto 2rem; }
-.dopo-copy { font-family: articulat-cf, sans-serif; font-size: 1rem; font-weight: 900; line-height: 1.6; }
-.dopo-copy p { margin: 0 0 1rem; }
-.dopo-mobile-copy { display: none; }
-.dopo-dark-text { color: #3e4f63; }
-.dopo-dark-text .dopo-logo { filter: invert(1); }
-.dopo-navigation { position: absolute; bottom: 24px; left: 24px; color: white; }
-body:has(.dopo-dark-text) .dopo-navigation { color: #3e4f63; }
-.dopo-page:focus-visible .dopo-logo { outline: 1px solid currentColor; outline-offset: 12px; }
-body[data-page="formal"] .sky { background: #cbb98f url('/assets/formal-camo-landscape.jpg') center/cover no-repeat; }
-body:has(.detail[data-mark="flower"]) .sky { background: #fff; }
-body:has(.detail[data-mark]) .sky img, body[data-page="formal"] .sky img { visibility: hidden; }
-.formal-page { animation: none; }
-.formal-space { flex: 1; }
-.detail[data-mark] .detail-content::after {
-  content: '';
-  width: min(80%, 740px);
-  height: clamp(54px, 9vw, 112px);
-  margin-top: clamp(24px, 5svh, 48px);
-  background-image: var(--three-marks);
-  background-position: left center, center, right center;
-  background-size: clamp(48px, 8vw, 104px) auto;
-  background-repeat: no-repeat;
+/* The five handwritten sheets sit directly on their section backgrounds. */
+body[data-page="studios"] { --note-color: #799dbb; --note-image: url('/assets/strikeout-sky.jpg'); }
+body[data-page="ssc"] { --note-color: #000; --note-ink: #fff; }
+body[data-page="dopo"] { --note-color: #fbae9d; }
+body[data-page="formal"] { --note-color: #cbb98f; --note-image: url('/assets/formal-camo-landscape.jpg'); }
+body[data-page="about"] { --note-color: #f3b6c6; }
+:root:has(body[data-note]) { background-color: transparent; }
+body[data-note] { height: auto; padding: 0; background-color: var(--note-color); color: var(--note-ink, #080a0d); }
+body[data-note] .sky { display: none; }
+.note-page {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 44px;
+  place-items: center;
+  height: 100vh;
+  height: 100dvh;
+  padding: max(18px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+           max(6px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  background: var(--note-color) var(--note-image, none) center / cover no-repeat;
 }
+.note-art {
+  display: block;
+  width: min(100%, 724px);
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+}
+.note-page .back { font: 26px/1 Arial, sans-serif; }
+.note-page h1:focus { outline: none; }
+body[data-page="ssc"] .note-art { filter: invert(1); }
+body[data-page="formal"] .note-art {
+  filter: drop-shadow(0 0 1px #ffefd4) drop-shadow(0 0 .7px #ffefd4);
+}
+@media (max-width: 760px) {
+  body[data-page="formal"] { --note-image: url('/assets/formal-camo-portrait.jpg'); }
+}
+
 .detail h1.sr-only { margin: 0; }
 .catalog-detail { height: 100svh; height: 100dvh; min-height: 580px; gap: 18px; }
 .catalog-content { display: grid; grid-template-columns: 104px minmax(0, 720px) 104px; align-items: center; justify-content: center; flex: 1; min-height: 0; width: min(100%, 1024px); margin-inline: auto; gap: clamp(20px, 3.75vw, 48px); }
@@ -47,12 +52,3 @@ body:has(.detail[data-mark]) .sky img, body[data-page="formal"] .sky img { visib
 .catalog-unavailable-copy { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
 .catalog-unavailable h1 { font-size: clamp(100px, 30vw, 160px); margin-bottom: 18px; }
 .catalog-unavailable p { margin: 0; font-size: 17px; line-height: 1.4; }
-@media (max-width: 760px) {
-  .dopo-page { padding: 2rem 1.5rem; }
-  .dopo-content { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); max-width: 100%; padding: 0 1rem; }
-  .dopo-logo { width: 150px; margin-bottom: 1.5rem; }
-  .dopo-copy { font-size: .9rem; }
-  .dopo-desktop-copy { display: none; }
-  .dopo-mobile-copy { display: block; }
-  body[data-page="formal"] .sky { background-image: url('/assets/formal-camo-portrait.jpg'); }
-}
