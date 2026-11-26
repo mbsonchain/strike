@@ -23,7 +23,10 @@ const html = versionHtml(sources.get('index.html'));
 await writeFile('dist/index.html', html);
 await writeFile('dist/mobile-preview.html', versionHtml(sources.get('mobile-preview.html')));
 for (const page of pages) {
-  await writeFile(`dist/${page.slug}.html`, html.replace('<title>Strikeout</title>', `<title>${page.title} — Strikeout</title>`));
+  const pageHtml = html
+    .replace('<body>', `<body data-page="${page.slug}">`)
+    .replace('<title>Strikeout</title>', `<title>${page.title} — Strikeout</title>`);
+  await writeFile(`dist/${page.slug}.html`, pageHtml);
 }
 await writeFile('dist/404.html', html.replace('<title>Strikeout</title>', '<title>Not found — Strikeout</title>'));
 await writeFile('dist/release.json', JSON.stringify({ release }) + '\n');

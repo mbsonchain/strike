@@ -60,6 +60,13 @@ a:focus-visible { text-decoration: underline; text-decoration-thickness: 2px; te
 .catalog-row[data-mark] { --highlight-color: #fff; --highlight-ink: #080a0d; --highlight-image: var(--three-marks); --highlight-size: min(52px, 30%) auto; --highlight-position: 6% center, center, 94% center; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(16px, 4vw, 52px); padding-inline: clamp(16px, 4vw, 52px); }
 .catalog-row[data-mark]::before, .catalog-row[data-mark]::after { content: ''; position: static; z-index: auto; width: 100%; height: 56px; background-image: var(--highlight-image); background-size: var(--highlight-size); background-position: var(--highlight-position); background-repeat: no-repeat; opacity: 0; pointer-events: none; transition: opacity 170ms ease; }
 .catalog-row[data-mark]:is(:focus-visible, :active, [data-preview])::before, .catalog-row[data-mark]:is(:focus-visible, :active, [data-preview])::after { opacity: 1; }
+.catalog-row[data-mark="service"] {
+  --highlight-color: #000;
+  --highlight-ink: #fff;
+}
+.catalog-row[data-mark="service"],
+.catalog-row[data-mark="service"]::before,
+.catalog-row[data-mark="service"]::after { transition: none; }
 .controls { flex-shrink: 0; display: flex; justify-content: center; align-items: center; min-height: 44px; }
 .view-switch { width: 64px; height: 44px; border: 0; border-radius: 0; background: transparent; padding: 0 5px; position: relative; }
 .view-switch::before { content: ''; position: absolute; inset: 5px 0; border: 2px solid #080a0d; pointer-events: none; }

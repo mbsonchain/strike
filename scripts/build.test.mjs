@@ -44,6 +44,7 @@ test('every page loads one complete release, and a playback-only update changes 
   for (const [slug, title] of [['ssc', 'Service'], ['catalog', 'Catalog']]) {
     const html = await readFile(join(root, 'dist', `${slug}.html`), 'utf8');
     assert.ok(html.includes(`<title>${title} — Strikeout</title>`));
+    assert.ok(html.includes(`<body data-page="${slug}">`), 'the page theme is available before JavaScript runs');
   }
   assert.equal(await build(), first, 'unchanged builds keep the same addresses');
   const mediaPath = join(root, 'media.js');

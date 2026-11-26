@@ -1,6 +1,9 @@
 /* Initiative pages have their own identities; the catalog remains on the sky. */
 body[data-page="dopo"] { background: var(--dopo-color, #fbae9d); transition: background-color .4s ease; }
-body[data-page="dopo"] .sky { visibility: hidden; }
+body[data-page="ssc"] { background: #000; color: #fff; }
+body:is([data-page="dopo"], [data-page="ssc"]) .sky { visibility: hidden; }
+.detail[data-mark="service"] { animation: none; }
+.detail[data-mark="service"] .site-logo img { filter: brightness(0) invert(1); }
 .dopo-page { position: relative; display: flex; justify-content: center; align-items: center; min-height: 100svh; min-height: 100dvh; padding: 3rem 2rem; cursor: pointer; user-select: none; color: white; outline: none; }
 .dopo-content { width: 100%; max-width: 700px; text-align: center; }
 .dopo-logo { display: block; width: 200px; height: auto; margin: 0 auto 2rem; }
@@ -13,7 +16,7 @@ body[data-page="dopo"] .sky { visibility: hidden; }
 body:has(.dopo-dark-text) .dopo-navigation { color: #3e4f63; }
 .dopo-page:focus-visible .dopo-logo { outline: 1px solid currentColor; outline-offset: 12px; }
 body[data-page="formal"] .sky { background: #cbb98f url('/assets/formal-camo-landscape.jpg') center/cover no-repeat; }
-body:has(.detail[data-mark]) .sky { background: #fff; }
+body:has(.detail[data-mark="flower"]) .sky { background: #fff; }
 body:has(.detail[data-mark]) .sky img, body[data-page="formal"] .sky img { visibility: hidden; }
 .formal-page { animation: none; }
 .formal-space { flex: 1; }

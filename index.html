@@ -12,10 +12,28 @@
   <link rel="stylesheet" href="/styles.css">
   <link id="mobile-styles" rel="stylesheet" href="/mobile.css" media="(max-width: 760px)">
   <link rel="stylesheet" href="/pages.css">
+  <style>
+    .catalog-row[data-mark="service"]::before,
+    .catalog-row[data-mark="service"]::after,
+    .detail[data-mark="service"] .detail-content::after {
+      filter: url(#service-white-ink);
+    }
+  </style>
   <script type="module" src="/app.js"></script>
   <title>Strikeout</title>
 </head>
 <body>
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- Paint the original grayscale ink white. Light paper and empty pixels have zero opacity. -->
+      <filter id="service-white-ink" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="0 0 0 0 1
+                                             0 0 0 0 1
+                                             0 0 0 0 1
+                                            -1.1 0 0 1.05 0"/>
+      </filter>
+    </defs>
+  </svg>
   <div class="sky" aria-hidden="true"><img src="/assets/strikeout-sky.jpg" alt="" fetchpriority="high"></div>
   <main id="app"></main>
   <noscript><div class="no-script">STRIKEOUT<br>Enable JavaScript to enter.</div></noscript>
