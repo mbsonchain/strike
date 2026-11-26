@@ -27,11 +27,11 @@ body[data-page="formal"] .note-scenery::after {
 .note-page {
   position: relative;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto 44px;
+  grid-template-rows: minmax(0, 1fr) auto 44px;
   justify-items: center;
   height: 100vh;
   height: 100dvh;
-  padding: var(--masthead-top) max(5vw, env(safe-area-inset-right))
+  padding: max(18px, env(safe-area-inset-top)) max(5vw, env(safe-area-inset-right))
            max(6px, env(safe-area-inset-bottom)) max(5vw, env(safe-area-inset-left));
 }
 .note-page h1:focus { outline: none; }
@@ -63,15 +63,13 @@ body[data-page="formal"] .note-scenery::after {
   min-height: 44px;
   position: relative;
 }
-.note-page :is(.note-site, .back):focus-visible { text-decoration: none; outline: 2px solid currentColor; outline-offset: 3px; border-radius: 3px; }
+.note-page a:focus-visible { text-decoration: none; outline: 2px solid currentColor; outline-offset: 3px; border-radius: 3px; }
 .note-page .back { font: 26px/1 Arial, sans-serif; }
 body:is([data-page="studios"], [data-page="dopo"]) :is(.note-composition img, .note-signature, .note-page .back) {
   filter: drop-shadow(0 .7px .8px rgb(48 32 36 / 68%));
 }
 body[data-page="dopo"] { --opening-width: 96%; --continuation-width: 87%; }
 body[data-page="formal"] { --opening-width: 86%; }
-body[data-page="ssc"] .site-logo { color: #fff; }
-body[data-page="ssc"] .site-logo img { filter: invert(1); }
 body[data-page="about"] { color: #000; --opening-width: 83%; --continuation-width: 89%; }
 body[data-page="about"] .note-ending { margin-block-end: clamp(10px, 2.5dvh, 24px); }
 body[data-page="about"] .note-signature { height: min(21dvh, 190px); max-width: 66vw; }
@@ -96,7 +94,7 @@ body[data-page="about"] .note-signature { height: min(21dvh, 190px); max-width: 
 }
 @media (max-width: 760px) and (orientation: portrait) {
   .note-page {
-    padding: var(--masthead-top) max(16px, env(safe-area-inset-right))
+    padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
              max(3px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   }
   .note-composition {
@@ -110,10 +108,7 @@ body[data-page="about"] .note-signature { height: min(21dvh, 190px); max-width: 
   .note-flowers span:nth-child(3) { width: clamp(29px, 8vw, 46px); bottom: 8%; right: 4.5%; }
 }
 @media (max-height: 550px) and (orientation: landscape) {
-  :root { --masthead-top: max(6px, env(safe-area-inset-top)); }
-  .site-logo { min-width: 44px; min-height: 44px; }
-  .site-logo img { width: 38px; }
-  .note-page { padding-block: var(--masthead-top) max(2px, env(safe-area-inset-bottom)); }
+  .note-page { padding-block: max(4px, env(safe-area-inset-top)) max(2px, env(safe-area-inset-bottom)); }
   .note-composition { padding-block: 2px; }
   .note-signature { height: 27px; }
   .note-flowers span:nth-child(2) { width: 38px; top: auto; bottom: 13%; left: 8%; }

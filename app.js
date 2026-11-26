@@ -1,6 +1,6 @@
 import { film, menuPages, pages } from './content.js';
 import { mountFilm, handleSoundShortcut } from './media.js';
-import { pageMarkup, escapeHtml, logoMarkup } from './pages.js';
+import { pageMarkup, escapeHtml } from './pages.js';
 import { scrollToContent } from './viewport.js';
 
 const app = document.querySelector('#app');
@@ -9,12 +9,13 @@ const homeColor = browserTheme.content;
 const mobile = window.matchMedia('(max-width: 760px)');
 let filmPlayer;
 const markAttribute = page => page?.mark ? ` data-mark="${escapeHtml(page.mark)}"` : '';
+const logoMarkup = '<div class="masthead"><a class="site-logo" href="/" aria-label="Strikeout entrance"><img src="/assets/strikeout-s.png" alt="Strikeout" width="480" height="445"></a></div>';
 
-function navigate(path, focus = true) {
+function navigate(path) {
   const destination = new URL(path, location.origin);
   const next = `${destination.pathname}${destination.search}${destination.hash}`;
   if (`${location.pathname}${location.search}${location.hash}` !== next) history.pushState({}, '', next);
-  render(focus);
+  render(true);
   scrollToContent();
 }
 
@@ -54,7 +55,7 @@ function render(focus = false) {
     return;
   }
   if (!['#video', '#catalog'].includes(location.hash)) {
-    app.innerHTML = '<header class="entrance" aria-label="Strikeout"><button class="enter" aria-label="Enter Strikeout"><img src="/assets/strikeout-s.png" alt="Strikeout S" width="484" height="435"></button></header>';
+    app.innerHTML = '<section class="entrance" aria-label="Strikeout"><button class="enter" aria-label="Enter Strikeout"><img src="/assets/strikeout-s.png" alt="Strikeout S" width="480" height="445"></button></section>';
     if (focus) app.querySelector('.enter').focus({ preventScroll: true });
     return;
   }
@@ -87,8 +88,7 @@ app.addEventListener('click', event => {
       scrollToContent();
       return;
     }
-    const focusDestination = !control.matches('.site-logo') || event.detail === 0;
-    navigate(`${control.pathname}${control.hash}`, focusDestination);
+    navigate(`${control.pathname}${control.hash}`);
   } else if (control?.matches('.enter')) {
     navigate('/#video');
   } else if (control?.matches('.view-switch')) {

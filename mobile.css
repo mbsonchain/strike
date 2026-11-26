@@ -1,15 +1,15 @@
-:root { --edge: 16px; --masthead-top: max(24px, env(safe-area-inset-top)); --sky-bleed: 50lvh; background-color: #799dbb; overflow: hidden; overscroll-behavior: none; }
+:root { --edge: 16px; --sky-bleed: 50lvh; background-color: #799dbb; overflow: hidden; overscroll-behavior: none; }
 /* Keep real sky pixels beneath Safari's bars, without making the page draggable. */
 body { position: relative; height: auto; padding-block: var(--sky-bleed); overflow: hidden; overscroll-behavior: none; touch-action: pinch-zoom; }
 .sky { position: absolute; inset: 0; height: auto; transform: none; }
 .sky img { position: absolute; inset: 0; }
 #app, .entrance, .experience, .detail { min-height: 100svh; min-height: 100dvh; }
 .enter img { width: 172px; }
-.experience, .detail { padding-inline: max(var(--edge), env(safe-area-inset-left), env(safe-area-inset-right)); padding-block: var(--masthead-top) max(24px, env(safe-area-inset-bottom)); text-align: center; }
-.experience { align-items: center; gap: 28px; }
+.experience, .detail { padding-inline: max(var(--edge), env(safe-area-inset-left), env(safe-area-inset-right)); padding-block: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-bottom)); text-align: center; }
+.experience { justify-content: center; align-items: center; gap: 28px; }
 .site-logo { min-width: 48px; min-height: 48px; }
 .site-logo img { width: 46px; }
-.stage { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; margin-block: auto; gap: 28px; padding-bottom: 0; }
+.stage { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; gap: 28px; padding-bottom: 0; }
 .film-panel, .catalog-panel { margin: 0; width: 100%; max-width: none; }
 .film-panel { scroll-margin-top: 20px; }
 .film-frame { max-height: none; }
@@ -22,8 +22,7 @@ body { position: relative; height: auto; padding-block: var(--sky-bleed); overfl
 .detail h1 { font-size: clamp(49px, 15vw, 112px); }
 .detail .controls { gap: 12px; }
 @media (max-height: 700px) {
-  :root { --masthead-top: max(16px, env(safe-area-inset-top)); }
-  .experience { gap: 16px; padding-block: var(--masthead-top) max(16px, env(safe-area-inset-bottom)); }
+  .experience { gap: 16px; padding-block: 16px; }
   .stage { gap: 16px; }
   .catalog-row { min-height: 44px; font-size: clamp(24px, 7vw, 36px); }
   .film-panel { max-width: min(100%, calc((100dvh - 340px) * 16 / 9)); }
